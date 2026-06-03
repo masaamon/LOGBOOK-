@@ -1,0 +1,1626 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lab Logbook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* ════════════════════════════════════════
+   TOKENS & CORE STYLES
+════════════════════════════════════════ */
+:root {
+  --bg:       #0b0f1a;
+  --bg2:      #111827;
+  --bg3:      #1a2236;
+  --border:   rgba(255,255,255,0.07);
+  --border2:  rgba(255,255,255,0.13);
+  --cyan:     #00e5c3;
+  --cyan-dim: rgba(0,229,195,0.15);
+  --red:      #ff4d6d;
+  --red-dim:  rgba(255,77,109,0.15);
+  --amber:    #ffb347;
+  --amber-dim:rgba(255,179,71,0.15);
+  --blue:     #5b8dee;
+  --blue-dim: rgba(91,141,238,0.15);
+  --text:     #e8eaf0;
+  --text2:    #8892a4;
+  --text3:    #4a5568;
+  --radius:   10px;
+  --radius-lg:16px;
+  --mono:     'JetBrains Mono', monospace;
+  --sans:     'IBM Plex Sans Thai', sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:var(--sans);
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* ════════════════════════════════════════
+   LAYOUT
+════════════════════════════════════════ */
+.shell{display:flex;height:100vh;overflow:hidden;}
+
+/* ── Sidebar ── */
+.sidebar{
+  width:220px;
+  flex-shrink:0;
+  background:var(--bg2);
+  border-right:1px solid var(--border);
+  display:flex;
+  flex-direction:column;
+  padding:0;
+  overflow:hidden;
+}
+.sidebar-logo{
+  padding:22px 20px 16px;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.logo-icon{
+  width:32px;height:32px;
+  background:linear-gradient(135deg,var(--cyan),var(--blue));
+  border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;flex-shrink:0;
+}
+.logo-text{font-size:.85rem;font-weight:600;line-height:1.2;}
+.logo-sub{font-size:.65rem;color:var(--text2);font-family:var(--mono);}
+
+.nav-section{
+  padding:16px 12px 0;
+  font-size:.6rem;
+  font-family:var(--mono);
+  color:var(--text3);
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+.nav-item{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 14px;
+  margin:2px 6px;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:.82rem;
+  color:var(--text2);
+  transition:all .2s;
+  border:1px solid transparent;
+}
+.nav-item:hover{background:var(--bg3);color:var(--text);}
+.nav-item.active{
+  background:var(--cyan-dim);
+  color:var(--cyan);
+  border-color:rgba(0,229,195,.2);
+}
+.nav-item .nav-icon{font-size:14px;width:18px;text-align:center;}
+.nav-item .nav-badge{
+  margin-left:auto;
+  background:var(--red);
+  color:#fff;
+  font-size:.6rem;
+  font-family:var(--mono);
+  padding:1px 5px;
+  border-radius:10px;
+  min-width:18px;
+  text-align:center;
+}
+
+.sidebar-footer{
+  margin-top:auto;
+  padding:12px;
+  border-top:1px solid var(--border);
+}
+.pin-status{
+  display:flex;align-items:center;gap:8px;
+  padding:8px 10px;
+  background:var(--bg3);
+  border-radius:8px;
+  font-size:.72rem;
+  font-family:var(--mono);
+  cursor:pointer;
+  border:1px solid var(--border);
+  transition:all .2s;
+}
+.pin-status:hover{border-color:var(--border2);}
+.pin-dot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--text3);
+  transition:background .3s;
+}
+.pin-dot.unlocked{background:var(--cyan);box-shadow:0 0 6px var(--cyan);}
+
+/* ── Main ── */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+
+.topbar{
+  height:56px;
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;
+  padding:0 24px;
+  gap:12px;
+  background:var(--bg2);
+  flex-shrink:0;
+}
+.page-title{font-size:1rem;font-weight:600;}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:8px;}
+.sync-info{font-size:.7rem;font-family:var(--mono);color:var(--text2);}
+.btn-reload{
+  padding:5px 12px;
+  background:var(--bg3);
+  border:1px solid var(--border2);
+  border-radius:6px;
+  color:var(--text2);
+  font-size:.72rem;
+  cursor:pointer;
+  transition:all .2s;
+  font-family:var(--sans);
+}
+.btn-reload:hover{color:var(--cyan);border-color:var(--cyan);}
+
+.content{flex:1;overflow-y:auto;padding:20px 24px;}
+
+/* ════════════════════════════════════════
+   PAGES & COMPONENTS
+════════════════════════════════════════ */
+.page{display:none;}
+.page.active{display:block;animation:fadeUp .25s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+.card{
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:var(--radius-lg);
+  padding:18px 20px;
+  margin-bottom:16px;
+}
+.card-title{
+  font-size:.78rem;
+  font-weight:600;
+  color:var(--text2);
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  font-family:var(--mono);
+  margin-bottom:14px;
+  display:flex;align-items:center;gap:8px;
+}
+.card-title .ct-right{margin-left:auto;display:flex;gap:6px;}
+
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px;}
+.stat-box{
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:14px 16px;
+}
+.stat-box .sv{font-size:1.6rem;font-weight:600;font-family:var(--mono);}
+.stat-box .sl{font-size:.68rem;color:var(--text2);margin-top:2px;}
+.stat-box.cyan .sv{color:var(--cyan);}
+.stat-box.red  .sv{color:var(--red);}
+.stat-box.amber .sv{color:var(--amber);}
+.stat-box.blue .sv{color:var(--blue);}
+
+.alert-item{
+  display:flex;align-items:center;gap:10px;
+  padding:8px 12px;
+  border-radius:8px;
+  font-size:.8rem;
+  margin-bottom:6px;
+  background:var(--bg3);
+  border:1px solid var(--border);
+}
+.alert-item.warn{border-left:3px solid var(--amber);}
+.alert-item.crit{border-left:3px solid var(--red);}
+.alert-item.info{border-left:3px solid var(--blue);}
+
+.recent-row{
+  display:flex;align-items:center;gap:12px;
+  padding:8px 0;
+  border-bottom:1px solid var(--border);
+  font-size:.8rem;
+}
+.recent-row:last-child{border-bottom:none;}
+.type-pill{
+  padding:2px 8px;border-radius:4px;
+  font-size:.65rem;font-family:var(--mono);font-weight:600;
+}
+.type-pill.OUT{background:var(--red-dim);color:var(--red);}
+.type-pill.IN{background:var(--cyan-dim);color:var(--cyan);}
+.type-pill.CHEM-USE{background:var(--blue-dim);color:var(--blue);}
+
+.filter-bar{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;}
+.filter-chip{
+  padding:4px 12px;
+  border-radius:20px;
+  border:1px solid var(--border2);
+  background:transparent;
+  color:var(--text2);
+  font-size:.72rem;
+  cursor:pointer;
+  transition:all .2s;
+  font-family:var(--sans);
+}
+.filter-chip:hover{border-color:var(--cyan);color:var(--text);}
+.filter-chip.active{background:var(--cyan-dim);border-color:var(--cyan);color:var(--cyan);}
+
+.item-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;}
+.item-card{
+  background:var(--bg3);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:14px;
+  cursor:pointer;
+  transition:all .2s;
+  position:relative;
+}
+.item-card:hover{border-color:var(--border2);transform:translateY(-2px);}
+.item-card .ic-loc{
+  position:absolute;top:8px;right:8px;
+  font-size:.58rem;color:var(--text3);
+  font-family:var(--mono);
+}
+.item-card .ic-name{font-size:.8rem;font-weight:600;margin:4px 0 6px;line-height:1.3;}
+.item-card .ic-size{font-size:.65rem;color:var(--text2);margin-bottom:6px;}
+.item-card .ic-qty{font-size:1.4rem;font-weight:600;font-family:var(--mono);}
+.item-card .ic-unit{font-size:.65rem;color:var(--text2);}
+.item-card .ic-qty.ok{color:var(--cyan);}
+.item-card .ic-qty.low{color:var(--amber);}
+.item-card .ic-qty.zero{color:var(--red);}
+.item-card .ic-edit{
+  position:absolute;bottom:8px;right:8px;
+  font-size:.6rem;color:var(--text3);
+  background:var(--bg2);
+  border:1px solid var(--border);
+  padding:2px 6px;border-radius:4px;
+  cursor:pointer;transition:all .2s;
+}
+.item-card .ic-edit:hover{color:var(--cyan);border-color:var(--cyan);}
+
+.chem-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;}
+.chem-card{
+  background:var(--bg3);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:14px 12px;
+  text-align:center;
+  position:relative;
+  transition:all .2s;
+}
+.chem-card:hover{border-color:var(--border2);}
+.chem-card .cc-edit{
+  position:absolute;top:7px;right:7px;
+  font-size:.6rem;color:var(--text3);
+  background:var(--bg2);
+  border:1px solid var(--border);
+  padding:2px 6px;border-radius:4px;
+  cursor:pointer;transition:all .2s;
+}
+.chem-card .cc-edit:hover{color:var(--cyan);border-color:var(--cyan);}
+
+.flask-wrap{margin:0 auto 10px;width:48px;height:64px;position:relative;}
+.flask-wrap svg{width:100%;height:100%;}
+.cc-name{font-size:.78rem;font-weight:600;line-height:1.3;margin-bottom:4px;}
+.cc-qty{font-size:.7rem;font-family:var(--mono);color:var(--text2);}
+.cc-exp{
+  display:inline-block;margin-top:6px;
+  font-size:.62rem;font-family:var(--mono);
+  padding:2px 7px;border-radius:4px;
+}
+.cc-exp.ok{background:var(--cyan-dim);color:var(--cyan);}
+.cc-exp.warn{background:var(--amber-dim);color:var(--amber);}
+.cc-exp.bad{background:var(--red-dim);color:var(--red);}
+
+.notebook{position:relative;}
+.nb-line{
+  position:absolute;left:52px;top:0;bottom:0;
+  width:1px;background:rgba(255,77,109,.2);
+}
+.log-entry{
+  position:relative;
+  padding:12px 12px 12px 72px;
+  border-bottom:1px dashed var(--border);
+}
+.log-entry::before{
+  content:'';position:absolute;left:46px;top:18px;
+  width:12px;height:12px;border-radius:50%;
+  background:var(--bg);border:2px solid var(--cyan);
+}
+.le-date{font-size:.68rem;font-family:var(--mono);color:var(--red);margin-bottom:3px;}
+.le-person{font-size:.65rem;color:var(--text2);}
+.le-detail{font-size:.85rem;margin-top:6px;line-height:1.6;}
+
+.task-board{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+.task-col-head{
+  font-size:.7rem;font-family:var(--mono);
+  padding:6px 10px;border-radius:6px;
+  margin-bottom:10px;text-align:center;letter-spacing:.04em;
+}
+.task-col-head.todo{background:var(--amber-dim);color:var(--amber);}
+.task-col-head.doing{background:var(--blue-dim);color:var(--blue);}
+.task-col-head.done{background:var(--bg3);color:var(--text3);}
+.task-card{
+  background:var(--bg3);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:10px 12px;
+  margin-bottom:8px;
+  font-size:.8rem;
+}
+.task-card .tc-title{font-weight:600;margin-bottom:4px;}
+.task-card .tc-meta{font-size:.65rem;color:var(--text2);font-family:var(--mono);}
+.task-card .tc-detail{font-size:.72rem;color:var(--text2);margin-top:5px;line-height:1.4;}
+.task-card .tc-actions{margin-top:8px;}
+
+.tx-table{width:100%;border-collapse:collapse;font-size:.78rem;}
+.tx-table th{
+  padding:8px 12px;text-align:left;
+  color:var(--text2);
+  border-bottom:1px solid var(--border);
+  font-family:var(--mono);font-size:.65rem;letter-spacing:.04em;
+  font-weight:500;
+}
+.tx-table td{padding:8px 12px;border-bottom:1px solid var(--border);}
+.tx-table tbody tr:hover{background:var(--bg3);}
+
+/* ════════════════════════════════════════
+   MODAL & UI
+════════════════════════════════════════ */
+.overlay{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,.6);
+  backdrop-filter:blur(4px);
+  z-index:200;
+  align-items:center;justify-content:center;
+}
+.overlay.show{display:flex;}
+.modal{
+  background:var(--bg2);
+  border:1px solid var(--border2);
+  border-radius:var(--radius-lg);
+  padding:24px;
+  width:92%;max-width:480px;
+  max-height:88vh;overflow-y:auto;
+  box-shadow:0 24px 80px rgba(0,0,0,.5);
+}
+.modal h2{font-size:1rem;font-weight:600;margin-bottom:18px;}
+.form-row{margin-bottom:12px;}
+.form-row label{
+  display:block;
+  font-size:.68rem;font-family:var(--mono);
+  color:var(--text2);margin-bottom:5px;letter-spacing:.04em;
+}
+.form-row input,
+.form-row select,
+.form-row textarea{
+  width:100%;
+  padding:8px 12px;
+  background:var(--bg3);
+  border:1px solid var(--border2);
+  border-radius:8px;
+  color:var(--text);
+  font-size:.85rem;
+  font-family:var(--sans);
+  transition:border-color .2s;
+}
+.form-row input:focus,
+.form-row select:focus,
+.form-row textarea:focus{outline:none;border-color:var(--cyan);}
+.form-row select option{background:var(--bg2);}
+.form-row textarea{min-height:90px;resize:vertical;}
+.form-row.two{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.form-row.two .form-row{margin-bottom:0;}
+.pin-input-field{
+  letter-spacing:.5em;font-size:1.4rem;
+  text-align:center;font-family:var(--mono);
+}
+
+.btn{
+  padding:8px 18px;border:none;border-radius:8px;
+  cursor:pointer;font-size:.8rem;font-weight:500;
+  transition:all .2s;font-family:var(--sans);
+}
+.btn-primary{background:var(--cyan);color:#0b0f1a;}
+.btn-primary:hover{opacity:.85;transform:translateY(-1px);}
+.btn-danger{background:var(--red);color:#fff;}
+.btn-danger:hover{opacity:.85;}
+.btn-ghost{
+  background:transparent;
+  border:1px solid var(--border2);
+  color:var(--text2);
+}
+.btn-ghost:hover{border-color:var(--border2);color:var(--text);}
+.btn-sm{padding:5px 12px;font-size:.72rem;}
+.btn-amber{background:var(--amber-dim);border:1px solid rgba(255,179,71,.3);color:var(--amber);}
+.btn-amber:hover{background:rgba(255,179,71,.25);}
+.modal-footer{display:flex;justify-content:flex-end;gap:8px;margin-top:20px;}
+.modal-footer.spread{justify-content:space-between;}
+
+/* ── Delete TX button inline ── */
+.tx-del-btn{
+  background:transparent;
+  border:1px solid rgba(255,77,109,.3);
+  color:var(--red);
+  font-size:.6rem;
+  padding:2px 7px;
+  border-radius:4px;
+  cursor:pointer;
+  font-family:var(--mono);
+  transition:all .2s;
+  white-space:nowrap;
+}
+.tx-del-btn:hover{background:var(--red-dim);border-color:var(--red);}
+
+.fab{
+  position:fixed;bottom:24px;right:24px;
+  width:52px;height:52px;border-radius:50%;
+  background:linear-gradient(135deg,var(--cyan),var(--blue));
+  border:none;color:#0b0f1a;font-size:1.4rem;
+  cursor:pointer;box-shadow:0 8px 24px rgba(0,229,195,.3);
+  z-index:100;transition:all .2s;display:flex;align-items:center;justify-content:center;
+}
+.fab:hover{transform:scale(1.1) rotate(45deg);}
+
+.toasts{position:fixed;top:16px;right:16px;z-index:300;display:flex;flex-direction:column;gap:8px;}
+.toast{
+  background:var(--bg2);
+  border:1px solid var(--border2);
+  border-radius:10px;
+  padding:10px 16px;
+  font-size:.8rem;
+  display:flex;align-items:center;gap:8px;
+  animation:slideIn .25s ease;
+  min-width:200px;max-width:320px;
+}
+.toast.ok{border-left:3px solid var(--cyan);}
+.toast.err{border-left:3px solid var(--red);}
+@keyframes slideIn{from{transform:translateX(110%);opacity:0}to{transform:translateX(0);opacity:1}}
+
+.skel{
+  background:linear-gradient(90deg,var(--bg3) 25%,var(--bg2) 50%,var(--bg3) 75%);
+  background-size:200% 100%;
+  animation:shimmer 1.4s infinite;
+  border-radius:8px;
+}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.empty{padding:32px;text-align:center;color:var(--text3);font-size:.82rem;}
+
+.bottom-nav{display:none;}
+.mobile-pin-btn{display:none;}
+/* ════════════════════════════════════════
+   CALENDAR DASHBOARD
+════════════════════════════════════════ */
+.calendar-header { 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  margin-bottom: 16px; 
+}
+.calendar-header button { 
+  background: var(--bg3); 
+  border: 1px solid var(--border); 
+  color: var(--text); 
+  padding: 6px 14px; 
+  border-radius: 8px; 
+  cursor: pointer; 
+  transition: all .2s; 
+  font-family: var(--mono); 
+}
+.calendar-header button:hover { 
+  border-color: var(--cyan); 
+  color: var(--cyan); 
+  background: var(--cyan-dim); 
+}
+.calendar-grid { 
+  display: grid; 
+  grid-template-columns: repeat(7, 1fr); 
+  gap: 6px; 
+  text-align: center; 
+}
+.cal-day-head { 
+  font-size: .7rem; 
+  color: var(--text3); 
+  font-family: var(--mono); 
+  padding-bottom: 6px; 
+}
+.cal-day { 
+  background: var(--bg2); 
+  border: 1px solid var(--border); 
+  border-radius: 8px; 
+  padding: 12px 4px; 
+  font-size: .85rem; 
+  font-family: var(--mono); 
+  cursor: pointer; 
+  transition: all .2s; 
+}
+.cal-day:hover:not(.empty) { 
+  border-color: var(--border2); 
+  background: var(--bg3); 
+  transform: translateY(-2px); 
+}
+.cal-day.empty { 
+  background: transparent; 
+  border-color: transparent; 
+  cursor: default; 
+}
+.cal-day.has-log { 
+  border-color: var(--cyan); 
+  color: var(--cyan); 
+  font-weight: 600; 
+  background: linear-gradient(135deg, rgba(0,229,195,0.1), transparent); 
+  box-shadow: inset 0 0 0 1px rgba(0,229,195,0.2);
+}
+.cal-day.active { 
+  background: var(--cyan); 
+  color: #0b0f1a; 
+  border-color: var(--cyan); 
+  font-weight: 600; 
+  box-shadow: 0 4px 12px rgba(0,229,195,0.3); 
+  transform: translateY(-2px); 
+}
+
+/* ════════════════════════════════════════
+   RESPONSIVE
+════════════════════════════════════════ */
+@media(max-width:900px){
+  .sidebar{width:180px;}
+  .stat-row{grid-template-columns:repeat(2,1fr);}
+  .task-board{grid-template-columns:1fr;}
+  .fab{bottom:80px;}
+}
+
+@media(max-width:640px){
+  .sidebar{display:none;}
+  .fab{display:none;}
+  .shell{flex-direction:column;}
+  .main{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+    padding-bottom:calc(64px + env(safe-area-inset-bottom, 0px));
+  }
+  .topbar{padding:0 14px;height:50px;}
+  .topbar .sync-info{font-size:.62rem;}
+  .content{padding:14px 12px;}
+  .stat-row{grid-template-columns:repeat(2,1fr);gap:8px;}
+  .item-grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));}
+  .chem-grid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr));}
+  .task-board{grid-template-columns:1fr;}
+  .card{padding:14px 12px;}
+  .nb-line{left:36px;}
+  .log-entry{padding:10px 10px 10px 56px;}
+  .log-entry::before{left:30px;}
+
+  .bottom-nav{
+    display:flex;
+    position:fixed;
+    bottom:0;left:0;right:0;
+    height:64px;
+    background:var(--bg2);
+    border-top:1px solid var(--border2);
+    z-index:150;
+    padding-bottom:env(safe-area-inset-bottom, 0px);
+  }
+  .bn-item{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:3px;
+    cursor:pointer;
+    color:var(--text3);
+    font-size:.48rem;
+    font-family:var(--mono);
+    letter-spacing:.01em;
+    transition:color .2s;
+    position:relative;
+    -webkit-tap-highlight-color:transparent;
+    user-select:none;
+  }
+  .bn-item .bn-icon{font-size:1.2rem;line-height:1;transition:transform .15s;}
+  .bn-item:active .bn-icon{transform:scale(.88);}
+  .bn-item.active{color:var(--cyan);}
+  .bn-item.active .bn-icon{filter:drop-shadow(0 0 6px rgba(0,229,195,.5));}
+  .bn-item.active::before{
+    content:'';
+    position:absolute;
+    top:6px;
+    width:20px;height:3px;
+    border-radius:2px;
+    background:var(--cyan);
+    box-shadow:0 0 8px var(--cyan);
+  }
+  .bn-item .bn-badge{
+    position:absolute;
+    top:5px;right:calc(50% - 16px);
+    background:var(--red);
+    color:#fff;
+    font-size:.5rem;
+    font-family:var(--mono);
+    padding:1px 4px;
+    border-radius:8px;
+    min-width:14px;
+    text-align:center;
+    line-height:1.4;
+  }
+  .sidebar-footer{display:none;}
+  .mobile-pin-btn{
+    display:flex;align-items:center;gap:6px;
+    padding:5px 10px;
+    background:var(--bg3);
+    border:1px solid var(--border);
+    border-radius:6px;
+    font-size:.62rem;
+    font-family:var(--mono);
+    cursor:pointer;
+    color:var(--text2);
+    white-space:nowrap;
+  }
+  .mobile-pin-btn .pin-dot{
+    width:7px;height:7px;border-radius:50%;
+    background:var(--text3);flex-shrink:0;
+  }
+  .mobile-pin-btn .pin-dot.unlocked{background:var(--cyan);box-shadow:0 0 5px var(--cyan);}
+}
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- ═══ Sidebar ═══ -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">🔬</div>
+      <div>
+        <div class="logo-text">Lab Logbook</div>
+        <div class="logo-sub">v2.1</div>
+      </div>
+    </div>
+
+    <div class="nav-section" style="margin-top:12px">ภาพรวม</div>
+    <nav id="mainNav">
+      <div class="nav-item active" data-page="dashboard"><span class="nav-icon">📊</span>Dashboard</div>
+      <div class="nav-section">คลังวัสดุ</div>
+      <div class="nav-item" data-page="items"><span class="nav-icon">🗄️</span>ตู้อุปกรณ์</div>
+      <div class="nav-item" data-page="chemicals"><span class="nav-icon">🧪</span>ตู้สารเคมี</div>
+      <div class="nav-section">บันทึก</div>
+      <div class="nav-item" data-page="experiments"><span class="nav-icon">🔬</span>โปรเจกต์ (Lab)</div>
+      <div class="nav-item" data-page="logs"><span class="nav-icon">📓</span>บันทึกการทดลอง</div>
+      <div class="nav-item" data-page="tasks"><span class="nav-icon">📋</span>งานประกาศ</div>
+      <div class="nav-item" data-page="history"><span class="nav-icon">📜</span>ประวัติเบิก-คืน</div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="pin-status" id="pinStatus" onclick="showPinModal()">
+        <div class="pin-dot" id="pinDot"></div>
+        <span id="pinLabel" style="font-size:.7rem">🔒 ล็อคอยู่</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ═══ Main ═══ -->
+  <div class="main">
+    <div class="topbar">
+      <div class="page-title" id="pageTitle">Dashboard</div>
+      <div class="topbar-right">
+        <span class="sync-info" id="syncInfo">กำลังโหลด...</span>
+        <button class="btn-reload" onclick="loadData()">↻ รีเฟรช</button>
+        <div class="mobile-pin-btn" id="mobilePinBtn" onclick="showPinModal()">
+          <div class="pin-dot" id="mobilePinDot"></div>
+          <span id="mobilePinLabel">🔒</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- Dashboard -->
+      <div class="page active" id="page-dashboard">
+        <div class="card">
+          <div class="calendar-header">
+            <button onclick="changeMonth(-1)">◀</button>
+            <span id="calMonthYear" style="font-size:.9rem; font-weight:600; color:var(--cyan);">กำลังโหลด...</span>
+            <button onclick="changeMonth(1)">▶</button>
+          </div>
+          <div class="calendar-grid" id="calGrid">
+            <div class="skel" style="height:200px; grid-column: span 7;"></div>
+          </div>
+        </div>
+
+        <div class="card" id="calLogDetailsCard" style="display:none; margin-top: 16px;">
+          <div class="card-title" id="calLogDetailsTitle">📓 บันทึกการทดลอง</div>
+          <div class="notebook" id="calLogDetailsList">
+            </div>
+        </div>
+      </div>
+
+      <!-- Items -->
+      <div class="page" id="page-items">
+        <div class="card">
+          <div class="card-title">
+            🗄️ ตู้อุปกรณ์
+            <div class="ct-right">
+              <button class="btn btn-primary btn-sm" onclick="openModal('checkout')">📤 เบิก</button>
+              <button class="btn btn-ghost btn-sm" onclick="openModal('return')">📥 คืน</button>
+              <button class="btn btn-amber btn-sm" onclick="requirePin('addItem')">+ เพิ่ม</button>
+            </div>
+          </div>
+          <div class="filter-bar" id="itemFilters"></div>
+          <div class="item-grid" id="itemGrid"><div class="skel" style="height:120px"></div></div>
+        </div>
+      </div>
+
+      <!-- Chemicals -->
+      <div class="page" id="page-chemicals">
+        <div class="card">
+          <div class="card-title">
+            🧪 ตู้สารเคมี
+            <div class="ct-right">
+              <button class="btn btn-primary btn-sm" onclick="openModal('useChem')">📝 บันทึกการใช้</button>
+              <button class="btn btn-amber btn-sm" onclick="requirePin('addChem')">+ เพิ่ม</button>
+            </div>
+          </div>
+          <div class="chem-grid" id="chemGrid"><div class="skel" style="height:160px"></div></div>
+        </div>
+      </div>
+
+      <!-- Experiments -->
+      <div class="page" id="page-experiments">
+        <div class="card">
+          <div class="card-title">
+            🔬 โปรเจกต์การทดลอง
+            <div class="ct-right">
+              <button class="btn btn-primary btn-sm" onclick="requirePin('addExp')">+ เริ่มการทดลอง</button>
+            </div>
+          </div>
+          <div class="item-grid" id="expGrid"><div class="skel" style="height:120px"></div></div>
+        </div>
+      </div>
+
+      <!-- Logs -->
+      <div class="page" id="page-logs">
+        <div class="card">
+          <div class="card-title">
+            📓 บันทึกการทดลอง
+            <div class="ct-right">
+              <button class="btn btn-primary btn-sm" onclick="openModal('addLog')">+ เพิ่ม</button>
+            </div>
+          </div>
+          <div class="notebook" id="notebook">
+            <div class="nb-line"></div>
+            <div id="logsList"><div class="skel" style="height:200px;margin-left:72px"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tasks -->
+      <div class="page" id="page-tasks">
+        <div class="card">
+          <div class="card-title">
+            📋 บอร์ดงาน
+            <div class="ct-right">
+              <button class="btn btn-primary btn-sm" onclick="openModal('addTask')">+ เพิ่ม</button>
+            </div>
+          </div>
+          <div class="task-board" id="taskBoard"><div class="skel" style="height:200px"></div></div>
+        </div>
+      </div>
+
+      <!-- History -->
+      <div class="page" id="page-history">
+        <div class="card">
+          <div class="card-title">
+            📜 ประวัติทั้งหมด
+            <div class="ct-right" style="font-size:.65rem;color:var(--text3);font-family:var(--mono)">
+              ต้องปลดล็อคก่อนลบ
+            </div>
+          </div>
+          <div style="overflow-x:auto">
+            <table class="tx-table">
+              <thead>
+                <tr>
+                  <th>วันที่-เวลา</th>
+                  <th>รายการ</th>
+                  <th>ประเภท</th>
+                  <th>จำนวน</th>
+                  <th>ผู้ดำเนินการ</th>
+                  <th>หมายเหตุ</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="txBody"><tr><td colspan="7"><div class="skel" style="height:80px"></div></td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /main -->
+</div><!-- /shell -->
+
+<!-- ═══ Bottom Navigation Bar ═══ -->
+<nav class="bottom-nav" id="bottomNav">
+  <div class="bn-item active" data-page="dashboard" id="bn-dashboard"><span class="bn-icon">📊</span></div>
+  <div class="bn-item" data-page="items" id="bn-items"><span class="bn-icon">🗄️</span></div>
+  <div class="bn-item" data-page="chemicals" id="bn-chemicals"><span class="bn-icon">🧪</span></div>
+  <div class="bn-item" data-page="experiments" id="bn-experiments"><span class="bn-icon">🔬</span></div>
+  <div class="bn-item" data-page="logs" id="bn-logs"><span class="bn-icon">📓</span></div>
+  <div class="bn-item" data-page="history" id="bn-history"><span class="bn-icon">📜</span></div>
+</nav>
+
+<button class="fab" onclick="openModal('quickAction')" title="Quick Action">+</button>
+<div class="toasts" id="toasts"></div>
+
+<!-- ═══ Modal ═══ -->
+<div class="overlay" id="overlay" onclick="handleOverlayClick(event)">
+  <div class="modal" id="modal" onclick="event.stopPropagation()"></div>
+</div>
+
+<script>
+// ════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════
+var DATA = { items:[], chemicals:[], tasks:[], dailyLogs:[], transactions:[], experiments:[] };
+var currentFilter  = 'ทั้งหมด';
+var PIN            = 'leo';
+var pinUnlocked    = false;
+var pinTimer       = null;
+var pinRemaining   = 0;
+var pendingAction  = null;
+var pendingExtra   = null;
+
+var PAGE_TITLES = {
+  dashboard: 'Dashboard',
+  items: 'ตู้อุปกรณ์',
+  chemicals: 'ตู้สารเคมี',
+  experiments: 'โปรเจกต์การทดลอง',
+  logs: 'บันทึกการทดลอง',
+  tasks: 'งานประกาศ',
+  history: 'ประวัติเบิก-คืน'
+};
+
+// ════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', function() {
+  setupNav();
+  setupBottomNav();
+  loadData();
+  updatePinUI();
+});
+
+// ════════════════════════════════════════
+// DATA
+// ════════════════════════════════════════
+function loadData() {
+  var t = Date.now();
+  document.getElementById('syncInfo').textContent = 'กำลังโหลด...';
+  google.script.run
+    .withSuccessHandler(function(d) {
+      DATA = d;
+      var elapsed = ((Date.now() - t) / 1000).toFixed(1);
+      document.getElementById('syncInfo').textContent =
+        '⚡ ' + elapsed + 's · ' + new Date().toLocaleTimeString('th-TH');
+      renderAll();
+    })
+    .withFailureHandler(function(e) {
+      toast('โหลดข้อมูลล้มเหลว: ' + e.message, 'err');
+      document.getElementById('syncInfo').textContent = '❌ โหลดล้มเหลว';
+    })
+    .apiGetDashboard();
+}
+
+function renderAll() {
+  renderDashboard();
+  renderItemFilters();
+  renderItems();
+  renderChemicals();
+  renderExperiments();
+  renderLogs();
+  renderTasks();
+  renderTx();
+  updateAlertBadge();
+}
+
+// ════════════════════════════════════════
+// NAV
+// ════════════════════════════════════════
+function navigateTo(page) {
+  document.querySelectorAll('.nav-item[data-page]').forEach(function(n){ n.classList.remove('active'); });
+  var sideItem = document.querySelector('.nav-item[data-page="' + page + '"]');
+if (sideItem) sideItem.classList.add('active');
+
+  document.querySelectorAll('.bn-item[data-page]').forEach(function(n){ n.classList.remove('active'); });
+  var bnItem = document.querySelector('.bn-item[data-page="' + page + '"]');
+  if (bnItem) bnItem.classList.add('active');
+
+  document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
+document.getElementById('page-' + page).classList.add('active');
+  document.getElementById('pageTitle').textContent = PAGE_TITLES[page] || page;
+}
+
+function setupNav() {
+  document.querySelectorAll('.nav-item[data-page]').forEach(function(el) {
+    el.addEventListener('click', function() { navigateTo(el.dataset.page); });
+  });
+}
+function setupBottomNav() {
+  document.querySelectorAll('.bn-item[data-page]').forEach(function(el) {
+    el.addEventListener('click', function() { navigateTo(el.dataset.page); });
+  });
+}
+
+// ════════════════════════════════════════
+// DASHBOARD
+// ════════════════════════════════════════
+function renderDashboard() {
+  var today   = new Date().toDateString();
+var logsToday = DATA.dailyLogs.filter(function(l){ return new Date(l.logDate).toDateString() === today; }).length;
+var pending   = DATA.tasks.filter(function(t){ return t.status !== 'DONE'; }).length;
+
+  document.getElementById('sItems').textContent = DATA.items.length;
+  document.getElementById('sChems').textContent = DATA.chemicals.length;
+document.getElementById('sLogs').textContent  = logsToday;
+  document.getElementById('sTasks').textContent = pending;
+
+  var alerts = [];
+DATA.items.forEach(function(i) {
+    var q = Number(i.qtyAvailable);
+    if (q <= 0)      alerts.push({ cls:'crit', msg:'🔴 ' + i.itemName + ' — หมดแล้ว' });
+    else if (q <= 2) alerts.push({ cls:'warn', msg:'🟡 ' + i.itemName + ' — เหลือน้อย (' + q + ' ' + (i.unit||'อัน') + ')' });
+  });
+var now = new Date();
+  DATA.chemicals.forEach(function(c) {
+    if (!c.expiryDate) return;
+    var diff = (new Date(c.expiryDate) - now) / 86400000;
+    if (diff <= 0)      alerts.push({ cls:'crit', msg:'🚫 ' + c.chemName + ' — หมดอายุแล้ว' });
+    else if (diff < 30) alerts.push({ cls:'warn', msg:'⏰ ' + c.chemName + ' — อีก ' + Math.ceil(diff) + ' วัน' });
+  });
+var al = document.getElementById('alertList');
+  if (alerts.length) {
+    al.innerHTML = alerts.map(function(a) { return '<div class="alert-item ' + a.cls + '">' + a.msg + '</div>'; }).join('');
+} else {
+    al.innerHTML = '<div class="empty">✅ ไม่มีการแจ้งเตือน</div>';
+}
+
+  var recent = DATA.transactions.slice().sort(function(a,b){ return new Date(b.dateTime)-new Date(a.dateTime); }).slice(0,6);
+  var rl = document.getElementById('recentList');
+if (recent.length) {
+    rl.innerHTML = recent.map(function(t) {
+      return '<div class="recent-row">' +
+        '<span class="type-pill ' + t.type + '">' + t.type + '</span>' +
+        '<span style="flex:1">' + t.itemName + '</span>' +
+        '<span style="color:var(--text2);font-size:.7rem;font-family:var(--mono)">' + t.person + '</span>' +
+        '<span style="color:var(--text3);font-size:.65rem;margin-left:8px">' + fmtDate(t.dateTime) + '</span>' +
+        '</div>';
+    }).join('');
+} else {
+    rl.innerHTML = '<div class="empty">ยังไม่มีกิจกรรม</div>';
+  }
+}
+
+function updateAlertBadge() {
+  var cnt = 0;
+  DATA.items.forEach(function(i){ if (Number(i.qtyAvailable) <= 2) cnt++; });
+  var now = new Date();
+  DATA.chemicals.forEach(function(c){
+    if (c.expiryDate && (new Date(c.expiryDate)-now)/86400000 < 30) cnt++;
+  });
+
+  var badge = document.querySelector('.nav-item[data-page="dashboard"] .nav-badge');
+  if (!badge) {
+    badge = document.createElement('span');
+    badge.className = 'nav-badge';
+    document.querySelector('.nav-item[data-page="dashboard"]').appendChild(badge);
+  }
+  badge.textContent = cnt;
+  badge.style.display = cnt > 0 ? '' : 'none';
+
+  var bnDash = document.getElementById('bn-dashboard');
+  if (bnDash) {
+    var bnBadge = bnDash.querySelector('.bn-badge');
+    if (!bnBadge) {
+      bnBadge = document.createElement('span');
+      bnBadge.className = 'bn-badge';
+      bnDash.appendChild(bnBadge);
+    }
+    bnBadge.textContent = cnt;
+    bnBadge.style.display = cnt > 0 ? '' : 'none';
+  }
+}
+
+// ════════════════════════════════════════
+// ITEMS & CHEMICALS & EXPERIMENTS
+// ════════════════════════════════════════
+function getCategories() {
+  var cats = ['ทั้งหมด'];
+  DATA.items.forEach(function(i) { if (i.category && cats.indexOf(i.category) < 0) cats.push(i.category); });
+  return cats;
+}
+function renderItemFilters() {
+  document.getElementById('itemFilters').innerHTML = getCategories().map(function(c) {
+    return '<button class="filter-chip' + (c === currentFilter ? ' active' : '') + '" onclick="setFilter(\'' + esc(c) + '\')">' + c + '</button>';
+  }).join('');
+}
+function setFilter(cat) { currentFilter = cat; renderItemFilters(); renderItems(); }
+
+function renderItems() {
+  var list = currentFilter === 'ทั้งหมด' ? DATA.items : DATA.items.filter(function(i){ return i.category === currentFilter; });
+  if (!list.length) { document.getElementById('itemGrid').innerHTML = '<div class="empty">ไม่มีรายการในหมวดนี้</div>'; return; }
+  document.getElementById('itemGrid').innerHTML = list.map(function(item) {
+    var q  = Number(item.qtyAvailable);
+    var qc = q <= 0 ? 'zero' : q <= 2 ? 'low' : 'ok';
+    return '<div class="item-card" onclick="itemDetail(\'' + item.itemId + '\')">' +
+      '<div class="ic-loc">' + (item.location||'') + '</div>' +
+      '<div style="font-size:1.3rem;margin-bottom:6px">' + catIcon(item.category) + '</div>' +
+      '<div class="ic-name">' + item.itemName + '</div>' +
+      (item.size ? '<div class="ic-size">' + item.size + '</div>' : '') +
+      '<div class="ic-qty ' + qc + '">' + q + '</div>' +
+      '<div class="ic-unit">' + (item.unit||'อัน') + '</div>' +
+      '<div class="ic-edit" onclick="event.stopPropagation();requirePin(\'editItem\',\'' + item.itemId + '\')">✏️ แก้ไข</div>' +
+      '</div>';
+  }).join('');
+}
+
+function catIcon(c) {
+  var m = {'เครื่องแก้ว':'🧫','เครื่องมือ':'🔧','อุปกรณ์':'📦','อุปกรณ์ป้องกัน':'🧤','เฟอร์นิเจอร์':'🗄️'};
+  return m[c] || '📦';
+}
+
+function renderChemicals() {
+  if (!DATA.chemicals.length) { document.getElementById('chemGrid').innerHTML = '<div class="empty">ยังไม่มีสารเคมี</div>'; return; }
+  var now = new Date();
+  document.getElementById('chemGrid').innerHTML = DATA.chemicals.map(function(ch) {
+    var qty  = Number(ch.qtyRemaining) || 0;
+    var max  = Number(ch.maxQty) || qty || 1;
+    var pct  = Math.min(100, Math.max(4, (qty / max) * 100));
+    var fill = pct < 30 ? '#ff4d6d' : pct < 60 ? '#ffb347' : '#00e5c3';
+    var expHtml = '';
+    if (ch.expiryDate) {
+      var diff = (new Date(ch.expiryDate) - now) / 86400000;
+      if (diff <= 0)      expHtml = '<span class="cc-exp bad">🚫 หมดอายุ</span>';
+      else if (diff < 30) expHtml = '<span class="cc-exp warn">⏰ อีก ' + Math.ceil(diff) + ' วัน</span>';
+      else                expHtml = '<span class="cc-exp ok">✅ ยังใช้ได้</span>';
+    }
+    var flaskSvg = '<svg viewBox="0 0 48 64" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+      '<rect x="18" y="2" width="12" height="14" rx="2" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>' +
+      '<path d="M14 16 L6 54 Q4 62 12 62 L36 62 Q44 62 42 54 L34 16 Z" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>' +
+      '<clipPath id="c' + ch.chemId + '"><path d="M14 16 L6 54 Q4 62 12 62 L36 62 Q44 62 42 54 L34 16 Z"/></clipPath>' +
+      '<rect clip-path="url(#c' + ch.chemId + ')" x="0" y="' + (62 - (46 * pct/100)) + '" width="48" height="46" fill="' + fill + '" opacity=".7"/>' +
+      '</svg>';
+
+    return '<div class="chem-card">' +
+      '<div class="cc-edit" onclick="requirePin(\'editChem\',\'' + ch.chemId + '\')">✏️</div>' +
+      '<div class="flask-wrap">' + flaskSvg + '</div>' +
+      '<div class="cc-name">' + ch.chemName + '</div>' +
+      '<div class="cc-qty">' + qty + ' / ' + max + ' ' + (ch.unit||'mL') + '</div>' +
+      expHtml +
+      '</div>';
+  }).join('');
+}
+
+function renderExperiments() {
+  if (!DATA.experiments || !DATA.experiments.length) {
+    document.getElementById('expGrid').innerHTML = '<div class="empty">ยังไม่มีโปรเจกต์การทดลอง</div>';
+    return;
+  }
+  document.getElementById('expGrid').innerHTML = DATA.experiments.map(function(ex) {
+    var usedTxs = DATA.transactions.filter(function(t) { return t.type === 'CHEM-USE' && t.expId === ex.expId; });
+    var chemCount = usedTxs.length;
+    return '<div class="item-card" onclick="expDetail(\'' + ex.expId + '\')">' +
+      '<div class="ic-loc" style="color:var(--cyan)">' + (ex.status || 'Active') + '</div>' +
+      '<div style="font-size:1.3rem;margin-bottom:6px">🧪</div>' +
+      '<div class="ic-name">' + ex.expName + '</div>' +
+      '<div class="ic-size">สารเคมีที่เบิกใช้: ' + chemCount + ' รายการ</div>' +
+      '</div>';
+  }).join('');
+}
+
+function expDetail(id) {
+  var ex = DATA.experiments.find(function(e) { return e.expId === id; });
+  if (!ex) return;
+
+  var usedTxs = DATA.transactions.filter(function(t) { return t.type === 'CHEM-USE' && t.expId === id; });
+
+  var chemHtml = '';
+  if (usedTxs.length) {
+    chemHtml = usedTxs.map(function(t) {
+      var delBtn = pinUnlocked
+        ? '<button class="tx-del-btn" onclick="confirmDeleteTx(\'' + t.txId + '\',\'' + esc(t.itemName) + '\',' + t.qty + ')">🗑️ ลบ</button>'
+        : '';
+      return '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px dashed var(--border);font-size:.8rem;gap:8px;">' +
+             '<span style="flex:1">' + t.itemName + ' <span style="color:var(--text3);font-size:0.65rem">(' + fmtDate(t.dateTime) + ')</span></span>' +
+             '<span style="color:var(--cyan);font-family:var(--mono);flex-shrink:0">' + t.qty + '</span>' +
+             delBtn +
+             '</div>';
+    }).join('');
+  } else {
+    chemHtml = '<div class="empty" style="padding:10px">ยังไม่มีการเบิกสารเคมีเข้าแลปนี้</div>';
+  }
+
+  var lockNote = pinUnlocked ? '' : '<div style="font-size:.65rem;color:var(--text3);text-align:right;margin-bottom:6px">🔒 ปลดล็อคเพื่อลบรายการ</div>';
+
+  setModal(
+    '<h2>🔬 ' + ex.expName + '</h2>' +
+    '<p style="font-size:.8rem;color:var(--text2);margin-bottom:14px">ผู้วิจัย: ' + (ex.researcher || '-') + '</p>' +
+    '<div class="card-title" style="margin-bottom:4px">🧪 ปริมาณสารเคมีที่ใช้ในแลปนี้</div>' +
+    lockNote +
+    '<div style="background:var(--bg3);padding:10px 14px;border-radius:8px;margin-bottom:14px;max-height:220px;overflow-y:auto;">' + chemHtml + '</div>' +
+    '<div class="modal-footer spread">' +
+      '<button class="btn btn-amber btn-sm" onclick="closeModal(); openModal(\'useChem\', \'' + id + '\')">📤 เบิกสารเคมีเพิ่ม</button>' +
+      '<button class="btn btn-ghost" onclick="closeModal()">ปิด</button>' +
+    '</div>'
+  );
+}
+
+// ════════════════════════════════════════
+// LOGS & TASKS & TX
+// ════════════════════════════════════════
+function renderLogs() {
+  var logs = DATA.dailyLogs.slice().sort(function(a,b){ return new Date(b.logDate)-new Date(a.logDate); });
+  if (!logs.length) { document.getElementById('logsList').innerHTML = '<div class="empty" style="margin-left:72px">ยังไม่มีบันทึก</div>'; return; }
+  document.getElementById('logsList').innerHTML = logs.map(function(l) {
+    return '<div class="log-entry">' +
+      '<div class="le-date">' + new Date(l.logDate).toLocaleDateString('th-TH',{weekday:'long',year:'numeric',month:'long',day:'numeric'}) + '</div>' +
+      '<div class="le-person">👤 ' + l.person + '</div>' +
+      '<div class="le-detail">' + fmtLogDetail(l.detail) + '</div>' +
+      '</div>';
+  }).join('');
+}
+function fmtLogDetail(d) { return d ? String(d).replace(/\n/g, '<br>') : ''; }
+
+function renderTasks() {
+  var todo  = DATA.tasks.filter(function(t){ return t.status === 'TODO'; });
+  var doing = DATA.tasks.filter(function(t){ return t.status === 'DOING'; });
+  var done  = DATA.tasks.filter(function(t){ return t.status === 'DONE'; });
+
+  function col(tasks, label, cls, nextStatus, nextLabel) {
+    return '<div class="task-col"><div class="task-col-head ' + cls + '">' + label + ' (' + tasks.length + ')</div>' +
+      tasks.map(function(t) {
+        return '<div class="task-card">' +
+          '<div class="tc-title">' + t.title + '</div>' +
+          '<div class="tc-meta">' + (t.owner||'-') + ' · ' + (t.dueDate ? new Date(t.dueDate).toLocaleDateString('th-TH') : '-') + '</div>' +
+          (t.detail ? '<div class="tc-detail">' + t.detail + '</div>' : '') +
+          (nextStatus ? '<div class="tc-actions"><button class="btn btn-ghost btn-sm" onclick="updateTask(\'' + t.taskId + '\',\'' + nextStatus + '\')">→ ' + nextLabel + '</button></div>' : '') +
+          '</div>';
+      }).join('') + '</div>';
+  }
+
+  document.getElementById('taskBoard').innerHTML =
+    col(todo,  '📌 รอทำ',    'todo',  'DOING', 'กำลังทำ') +
+    col(doing, '🔄 กำลังทำ', 'doing', 'DONE',  'เสร็จ') +
+    col(done,  '✅ เสร็จ',   'done',  null,    null);
+}
+
+function renderTx() {
+  var txs = DATA.transactions.slice().sort(function(a,b){ return new Date(b.dateTime)-new Date(a.dateTime); });
+  if (!txs.length) {
+    document.getElementById('txBody').innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--text3);padding:20px">ยังไม่มีรายการ</td></tr>';
+    return;
+  }
+  document.getElementById('txBody').innerHTML = txs.map(function(t) {
+    var delCell = pinUnlocked
+      ? '<td><button class="tx-del-btn" onclick="confirmDeleteTx(\'' + t.txId + '\',\'' + esc(t.itemName) + '\',' + t.qty + ')">🗑️ ลบ</button></td>'
+      : '<td></td>';
+    return '<tr>' +
+      '<td style="font-family:var(--mono);font-size:.7rem">' + fmtDate(t.dateTime) + '</td>' +
+      '<td>' + t.itemName + '</td>' +
+      '<td><span class="type-pill ' + t.type + '">' + t.type + '</span></td>' +
+      '<td style="font-family:var(--mono)">' + t.qty + '</td>' +
+      '<td>' + t.person + '</td>' +
+      '<td style="color:var(--text2)">' + (t.note||'-') + '</td>' +
+      delCell +
+      '</tr>';
+  }).join('');
+}
+
+// ════════════════════════════════════════
+// DELETE TRANSACTION
+// ════════════════════════════════════════
+function confirmDeleteTx(txId, name, qty) {
+  if (!pinUnlocked) { toast('🔒 ปลดล็อคก่อนลบ', 'err'); return; }
+
+  var typeMap = {};
+  DATA.transactions.forEach(function(t){ typeMap[t.txId] = t.type; });
+  var txType = typeMap[txId] || '';
+  var reverseNote = '';
+  if (txType === 'CHEM-USE') reverseNote = 'สารเคมีจะถูกคืนสต็อก ' + qty + ' หน่วย';
+  else if (txType === 'OUT') reverseNote = 'อุปกรณ์จะถูกคืนสต็อก ' + qty + ' หน่วย';
+  else if (txType === 'IN') reverseNote = 'อุปกรณ์จะถูกหักสต็อก ' + qty + ' หน่วย';
+
+  setModal(
+    '<h2>🗑️ ยืนยันลบรายการ</h2>' +
+    '<p style="font-size:.85rem;margin-bottom:10px">รายการ: <strong>' + name + '</strong></p>' +
+    (reverseNote ? '<div class="alert-item warn" style="margin-bottom:14px">⚠️ ' + reverseNote + ' (ย้อนกลับอัตโนมัติ)</div>' : '') +
+    '<p style="font-size:.78rem;color:var(--text2)">การกระทำนี้ไม่สามารถยกเลิกได้</p>' +
+    '<div class="modal-footer">' +
+      '<button class="btn btn-ghost" onclick="closeModal()">ยกเลิก</button>' +
+      '<button class="btn btn-danger" onclick="doDeleteTx(\'' + txId + '\')">ลบ</button>' +
+    '</div>'
+  );
+}
+
+function doDeleteTx(txId) {
+  var idx = -1;
+  for (var _i = 0; _i < DATA.transactions.length; _i++) {
+    if (DATA.transactions[_i].txId === txId) { idx = _i; break; }
+  }
+  var removed = null;
+  if (idx > -1) { removed = DATA.transactions.splice(idx, 1)[0]; }
+  if (removed) {
+    if (removed.type === 'CHEM-USE') {
+      var ch = DATA.chemicals.find(function(c){ return c.chemId === removed.itemId; });
+      if (ch) ch.qtyRemaining = Number(ch.qtyRemaining) + Number(removed.qty);
+    } else if (removed.type === 'OUT') {
+      var it = DATA.items.find(function(i){ return i.itemId === removed.itemId; });
+      if (it) it.qtyAvailable = Number(it.qtyAvailable) + Number(removed.qty);
+    } else if (removed.type === 'IN') {
+      var it2 = DATA.items.find(function(i){ return i.itemId === removed.itemId; });
+      if (it2) it2.qtyAvailable = Math.max(0, Number(it2.qtyAvailable) - Number(removed.qty));
+    }
+  }
+  renderAll();
+  closeModal();
+  toast('🗑️ ลบรายการสำเร็จ', 'ok');
+  google.script.run
+    .withSuccessHandler(loadData)
+    .withFailureHandler(function(e) {
+      toast('ลบล้มเหลว: ' + e.message, 'err');
+      loadData();
+    })
+    .apiDeleteTransaction({ txId: txId });
+}
+
+// ════════════════════════════════════════
+// MODALS
+// ════════════════════════════════════════
+function itemDetail(id) {
+  var item = DATA.items.find(function(i){ return i.itemId === id; });
+  if (!item) return;
+  var txs  = DATA.transactions.filter(function(t){ return t.itemId === id; }).slice(-5).reverse();
+  var q    = Number(item.qtyAvailable);
+  var qc   = q <= 0 ? 'red' : q <= 2 ? 'amber' : 'cyan';
+
+  setModal(
+    '<h2>' + item.itemName + '</h2>' +
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0">' +
+      '<div class="stat-box ' + qc + '"><div class="sv">' + q + '</div><div class="sl">คงเหลือ (' + (item.unit||'อัน') + ')</div></div>' +
+      '<div class="stat-box"><div class="sv" style="font-size:1rem;color:var(--text2)">' + (item.location||'-') + '</div><div class="sl">ตำแหน่ง</div></div>' +
+    '</div>' +
+    (item.size ? '<div style="font-size:.78rem;color:var(--text2);margin-bottom:12px">ขนาด: ' + item.size + '</div>' : '') +
+    '<div style="font-size:.7rem;font-family:var(--mono);color:var(--text3);margin-bottom:8px">RECENT TRANSACTIONS</div>' +
+    (txs.length ? txs.map(function(t){
+      return '<div style="display:flex;gap:8px;align-items:center;padding:6px 0;border-bottom:1px solid var(--border);font-size:.78rem">' +
+        '<span class="type-pill ' + t.type + '">' + t.type + '</span><span>x' + t.qty + '</span><span style="color:var(--text2)">' + t.person + '</span>' +
+        '<span style="margin-left:auto;color:var(--text3);font-size:.65rem">' + fmtDate(t.dateTime) + '</span></div>';
+    }).join('') : '<div style="color:var(--text3);font-size:.78rem;padding:8px 0">ไม่มีประวัติ</div>') +
+    '<div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal()">ปิด</button></div>'
+  );
+}
+
+function openModal(type, extra) {
+  var html = '';
+
+  if (type === 'quickAction') {
+    html = '<h2>⚡ Quick Action</h2>' +
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0">' +
+        '<button class="btn btn-primary" style="padding:14px" onclick="closeModal();openModal(\'checkout\')">📤 เบิกอุปกรณ์</button>' +
+        '<button class="btn btn-primary" style="padding:14px" onclick="closeModal();openModal(\'return\')">📥 คืนอุปกรณ์</button>' +
+        '<button class="btn btn-primary" style="padding:14px" onclick="closeModal();openModal(\'useChem\')">🧪 ใช้สารเคมี</button>' +
+        '<button class="btn btn-primary" style="padding:14px" onclick="closeModal();openModal(\'addLog\')">📓 บันทึกทดลอง</button>' +
+      '</div>' +
+      '<div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal()">ปิด</button></div>';
+  }
+  else if (type === 'checkout') {
+    var opts = DATA.items.map(function(i){ return '<option value="' + i.itemId + '">' + i.itemName + ' (เหลือ ' + i.qtyAvailable + ' ' + (i.unit||'อัน') + ')</option>'; }).join('');
+    html = '<h2>📤 เบิกอุปกรณ์</h2>' +
+      field('เลือกรายการ','<select id="f0">' + opts + '</select>') +
+      field('จำนวน','<input type="number" id="f1" min="1" value="1">') +
+      field('ผู้เบิก','<input type="text" id="f2" placeholder="ชื่อ-นามสกุล">') +
+      field('หมายเหตุ','<input type="text" id="f3">') +
+      '<div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal()">ยกเลิก</button><button class="btn btn-primary" onclick="doCheckout()">เบิก</button></div>';
+  }
+  else if (type === 'return') {
+    var opts = DATA.items.map(function(i){ return '<option value="' + i.itemId + '">' + i.itemName + '</option>'; }).join('');
+    html = '<h2>📥 คืนอุปกรณ์</h2>' +
+      field('เลือกรายการ','<select id="f0">' + opts + '</select>') +
+      field('จำนวน','<input type="number" id="f1" min="1" value="1">') +
+      field('ผู้คืน','<input type="text" id="f2" placeholder="ชื่อ-นามสกุล">') +
+      field('หมายเหตุ','<input type="text" id="f3">') +
+      '<div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal()">ยกเลิก</button><button class="btn btn-primary" onclick="doReturn()">คืน</button></div>';
+  }
+  else if (type === 'useChem') {
+    var opts = DATA.chemicals.map(function(c){ return '<option value="' + c.chemId + '">' + c.chemName + ' (เหลือ ' + c.qtyRemaining + ' ' + (c.unit||'mL') + ')</option>'; }).join('');
+    var expOpts = '<option value="">-- เบิกทั่วไป (ไม่ระบุแลป) --</option>' +
+      (DATA.experiments || []).map(function(ex){
+        return '<option value="' + ex.expId + '" ' + (extra === ex.expId ? 'selected' : '') + '>' + ex.expName + '</option>';
+      }).join('');
+
+    html = '<h2>🧪 บันทึกการใช้สารเคมี</h2>' +
+      field('สารเคมี','<select id="f0">' + opts + '</select>') +
+      field('ปริมาณที่ใช้','<input type="number" id="f1" min="0.01" step="0.01" value="1">') +
+      field('ผู้ใช้','<input type="text" id="f2" placeholder="ชื่อ-นามสกุล">') +
+      field('ใช้สำหรับการทดลอง (ถ้ามี)','<select id="f_exp">' + expOpts + '</select>') +
+      field('หมายเหตุ','<input type="text" id="f3">') +
+      '<div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal()">ยกเลิก</button><button class="btn btn-primary" onclick="doUseChem()">บันทึก</button></div>';
+  }
+  else if (type === 'addExp') {
+    html = '<h2>➕ เริ่มการทดลองใหม่</h2>' +
+      field('ชื่อโปรเจกต์/การทดลอง','<input type="text" id="f0" placeholder="เช่น หา DOC ด้วยไคโตซาน...">') +
+      field('ผู้วิจัยหลัก','<input type="text" id="f1">') +
+      '<div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal()">ยกเลิก</button><button class="btn btn-primary" onclick="doAddExp()">บันทึก</button></div>';
+  }
+  else if (type === 'addItem') {
+    html = '<h2>➕ เพิ่มอุปกรณ์ใหม่</h2>' +
+      field('ชื่ออุปกรณ์','<input type="text" id="f0">') +
+      field('หมวดหมู่','<select id="f1"><option>เครื่องแก้ว</option><option>เครื่องมือ</option><option>อุปกรณ์</option><option>อุปกรณ์ป้องกัน</option><option>เฟอร์นิเจอร์</option><option selected>ทั่วไป</option></select>') +
+      field('ขนาด','<input type="text" id="f2" placeholder="เช่น 100 mL">') +
+      field('หน่วย','<input type="text" id="f3" value="อัน">') +
+      field('จำนวน','<input type="number" id="f4" min="0" value="1">') +
+      field('ตำแหน่ง','<input type="text" id="f5" value="ตู้ A">') +
+      '<div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal()">ยกเลิก</button><button class="btn btn-primary" onclick="doAddItem()">เพิ่ม</button></div>';
+  }
+  else if (type === 'editItem') {
+    var item = DATA.items.find(function(i){ return i.itemId === extra; });
+    if (!item) { toast('ไม่พบรายการ','err'); return; }
+    var catOpts = ['เครื่องแก้ว','เครื่องมือ','อุปกรณ์','อุปกรณ์ป้องกัน','เฟอร์นิเจอร์','ทั่วไป'].map(function(c){ return '<option' + (c===item.category?' selected':'') + '>' + c + '</option>'; }).join('');
+    html = '<h2>✏️ แก้ไขอุปกรณ์</h2>' +
+      field('ชื่ออุปกรณ์','<input type="text" id="f0" value="' + esc(item.itemName) + '">') +
+      field('หมวดหมู่','<select id="f1">' + catOpts + '</select>') +
+      field('ขนาด','<input type="text" id="f2" value="' + esc(item.size||'') + '">') +
+      field('หน่วย','<input type="text" id="f3" value="' + esc(item.unit||'อัน') + '">') +
+      field('จำนวนในสต็อก','<input type="number" id="f4" min="0" value="' + item.qtyAvailable + '">') +
+      field('ตำแหน่ง','<input type="text" id="f5" value="' + esc(item.location||'') + '">') +
+      '<div class="modal-footer spread"><button class="btn btn-danger btn-sm" onclick="doDeleteItem(\'' + extra + '\')">🗑️ ลบ</button><div style="display:flex;gap:8px"><button class="btn btn-ghost" onclick="closeModal()">ยกเลิก</button><button class="btn btn-primary" onclick="doEditItem(\'' + extra + '\')">บันทึก</button></div></div>';
+  }
+  else if (type === 'addChem') {
+    html = '<h2>➕ เพิ่มสารเคมีใหม่</h2>' +
+      field('ชื่อสารเคมี','<input type="text" id="f0">') +
+      field('CAS No.','<input type="text" id="f1">') +
+      field('ปริมาณคงเหลือ','<input type="number" id="f2" min="0" value="0">') +
+      field('ปริมาณสูงสุด (สต็อก)','<input type="number" id="f3" min="0" value="0">') +
+      field('หน่วย','<select id="f4"><option>mL</option><option>L</option><option>g</option><option>kg</option></select>') +
+      field('วันผลิต','<input type="date" id="f5">') +
+      field('วันหมดอายุ','<input type="date" id="f6">') +
+      field('ตำแหน่ง','<input type="text" id="f7" value="ตู้สารเคมี A">') +
+      field('MSDS Link','<input type="text" id="f8" placeholder="https://...">') +
+      '<div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal()">ยกเลิก</button><button class="btn btn-primary" onclick="doAddChem()">เพิ่ม</button></div>';
+  }
+  else if (type === 'editChem') {
+    var ch = DATA.chemicals.find(function(c){ return c.chemId === extra; });
+    if (!ch) { toast('ไม่พบสารเคมี','err'); return; }
+    var fmtD = function(d){ try{ return d ? new Date(d).toISOString().slice(0,10) : ''; }catch(e){ return ''; }};
+    var unitOpts = ['mL','L','g','kg'].map(function(u){ return '<option' + (u===(ch.unit||'mL')?' selected':'') + '>' + u + '</option>'; }).join('');
+    html = '<h2>✏️ แก้ไขสารเคมี</h2>' +
+      field('ชื่อสารเคมี','<input type="text" id="f0" value="' + esc(ch.chemName) + '">') +
+      field('CAS No.','<input type="text" id="f1" value="' + esc(ch.casNo||'') + '">') +
+      field('ปริมาณคงเหลือ','<input type="number" id="f2" min="0" value="' + ch.qtyRemaining + '">') +
+      field('ปริมาณสูงสุด','<input type="number" id="f3" min="0" value="' + (ch.maxQty||ch.qtyRemaining) + '">') +
+      field('หน่วย','<select id="f4">' + unitOpts + '</select>') +
+      field('วันผลิต','<input type="date" id="f5" value="' + fmtD(ch.mfgDate) + '">') +
+      field('วันหมดอายุ','<input type="date" id="f6" value="' + fmtD(ch.expiryDate) + '">') +
+      field('ตำแหน่ง','<input type="text" id="f7" value="' + esc(ch.location||'') + '">') +
+      field('MSDS Link','<input type="text" id="f8" value="' + esc(ch.msdsLink||'') + '">') +
+      '<div class="modal-footer spread"><button class="btn btn-danger btn-sm" onclick="doDeleteChem(\'' + extra + '\')">🗑️ ลบ</button><div style="display:flex;gap:8px"><button class="btn btn-ghost" onclick="closeModal()">ยกเลิก</button><button class="btn btn-primary" onclick="doEditChem(\'' + extra + '\')">บันทึก</button></div></div>';
+  }
+  else if (type === 'addLog') {
+    html = '<h2>📓 เพิ่มบันทึกการทดลอง</h2>' +
+      field('วันที่','<input type="date" id="f0" value="' + new Date().toISOString().slice(0,10) + '">') +
+      field('ผู้บันทึก','<input type="text" id="f1">') +
+      field('รายละเอียด','<textarea id="f2" style="min-height:120px" placeholder="บันทึกผลการทดลอง, สังเกตการณ์..."></textarea>') +
+      '<div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal()">ยกเลิก</button><button class="btn btn-primary" onclick="doAddLog()">บันทึก</button></div>';
+  }
+  else if (type === 'addTask') {
+    html = '<h2>📋 เพิ่มงานประกาศ</h2>' +
+      field('หัวข้อ','<input type="text" id="f0">') +
+      field('รายละเอียด','<textarea id="f1"></textarea>') +
+      field('ผู้รับผิดชอบ','<input type="text" id="f2">') +
+      field('กำหนดเสร็จ','<input type="date" id="f3">') +
+      '<div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal()">ยกเลิก</button><button class="btn btn-primary" onclick="doAddTask()">เพิ่ม</button></div>';
+  }
+
+  setModal(html);
+}
+
+function field(label, input) { return '<div class="form-row"><label>' + label + '</label>' + input + '</div>'; }
+function setModal(html) { document.getElementById('modal').innerHTML = html; document.getElementById('overlay').classList.add('show'); }
+function closeModal() { document.getElementById('overlay').classList.remove('show'); }
+function handleOverlayClick(e) { if (e.target === e.currentTarget) closeModal(); }
+
+// ════════════════════════════════════════
+// PIN SYSTEM
+// ════════════════════════════════════════
+function showPinModal() {
+  if (pinUnlocked) {
+    pinUnlocked = false; clearInterval(pinTimer); pinTimer = null; pinRemaining = 0;
+    updatePinUI();
+    renderTx();
+    toast('🔒 ล็อคแล้ว', 'ok'); return;
+  }
+  pendingAction = null; pendingExtra = null; renderPinModal();
+}
+
+function requirePin(action, extra) {
+  if (pinUnlocked) { openModal(action, extra); return; }
+  pendingAction = action; pendingExtra = extra || null; renderPinModal();
+}
+
+function renderPinModal() {
+  setModal(
+    '<h2>🔒 ใส่รหัสผ่าน</h2>' +
+    '<div class="form-row"><label>รหัสผ่าน</label><input type="password" id="pinInput" class="pin-input-field" placeholder="••••••••" onkeydown="if(event.key===\'Enter\')submitPin()"></div>' +
+    '<div id="pinErr" style="display:none;color:var(--red);font-size:.75rem;margin-top:6px">❌ รหัสไม่ถูกต้อง</div>' +
+    '<div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal()">ยกเลิก</button><button class="btn btn-primary" onclick="submitPin()">ปลดล็อค</button></div>'
+  );
+  setTimeout(function(){ var el = document.getElementById('pinInput'); if(el) el.focus(); }, 80);
+}
+
+function submitPin() {
+  var el = document.getElementById('pinInput'); var err = document.getElementById('pinErr');
+  if (!el) return;
+  if (el.value === PIN) {
+    pinUnlocked = true; pinRemaining = 300; clearInterval(pinTimer);
+    pinTimer = setInterval(function() {
+      pinRemaining--; updatePinUI();
+      if (pinRemaining <= 0) {
+        pinUnlocked = false; clearInterval(pinTimer); pinTimer = null;
+        updatePinUI();
+        renderTx();
+        toast('🔒 หมดเวลา — ต้องใส่รหัสใหม่', 'err');
+      }
+    }, 1000);
+    updatePinUI();
+    renderTx();
+    toast('🔓 ปลดล็อคสำเร็จ (5 นาที)', 'ok');
+    var act = pendingAction; var ext = pendingExtra; pendingAction = null; pendingExtra = null;
+    closeModal(); if (act) { setTimeout(function(){ openModal(act, ext); }, 260); }
+  } else {
+    if (err) err.style.display = 'block'; el.value = ''; el.focus();
+  }
+}
+
+function updatePinUI() {
+  var m = Math.floor(pinRemaining / 60); var s = pinRemaining % 60;
+  var timeStr = m + ':' + String(s).padStart(2,'0');
+  var dot = document.getElementById('pinDot'); var label = document.getElementById('pinLabel');
+  if (dot && label) {
+    if (pinUnlocked) { dot.classList.add('unlocked'); label.textContent = '🔓 ' + timeStr; }
+    else { dot.classList.remove('unlocked'); label.textContent = '🔒 ล็อคอยู่'; }
+  }
+  var mDot = document.getElementById('mobilePinDot'); var mLabel = document.getElementById('mobilePinLabel');
+  if (mDot && mLabel) {
+    if (pinUnlocked) { mDot.classList.add('unlocked'); mLabel.textContent = '🔓 ' + timeStr; }
+    else { mDot.classList.remove('unlocked'); mLabel.textContent = '🔒'; }
+  }
+}
+
+// ════════════════════════════════════════
+// ACTIONS
+// ════════════════════════════════════════
+function gv(id) { var el = document.getElementById(id); return el ? el.value : ''; }
+
+function doCheckout() {
+  var p = { itemId: gv('f0'), qty: Number(gv('f1')), person: gv('f2'), note: gv('f3') };
+  if (!p.person) { toast('กรอกชื่อผู้เบิก','err'); return; }
+  if (!p.itemId) { toast('เลือกรายการ','err'); return; }
+  if (!p.qty || p.qty <= 0) { toast('จำนวนต้องมากกว่า 0','err'); return; }
+  var it = DATA.items.find(function(i){ return i.itemId === p.itemId; });
+  if (it) { if (Number(it.qtyAvailable) < p.qty) { toast('จำนวนไม่พอ','err'); return; } it.qtyAvailable = Number(it.qtyAvailable) - p.qty; }
+  renderAll(); closeModal(); toast('📤 เบิกสำเร็จ','ok');
+  google.script.run.withSuccessHandler(loadData).withFailureHandler(function(e){ toast(e.message,'err'); loadData(); }).apiCheckout(p);
+}
+
+function doReturn() {
+  var p = { itemId: gv('f0'), qty: Number(gv('f1')), person: gv('f2'), note: gv('f3') };
+  if (!p.person) { toast('กรอกชื่อผู้คืน','err'); return; }
+  if (!p.qty || p.qty <= 0) { toast('จำนวนต้องมากกว่า 0','err'); return; }
+  var it = DATA.items.find(function(i){ return i.itemId === p.itemId; });
+  if (it) it.qtyAvailable = Number(it.qtyAvailable) + p.qty;
+  renderAll(); closeModal(); toast('📥 คืนสำเร็จ','ok');
+  google.script.run.withSuccessHandler(loadData).withFailureHandler(function(e){ toast(e.message,'err'); loadData(); }).apiReturn(p);
+}
+
+function doUseChem() {
+  var p = { chemId: gv('f0'), qty: Number(gv('f1')), person: gv('f2'), expId: gv('f_exp'), note: gv('f3') };
+  if (!p.person) { toast('กรอกชื่อผู้ใช้','err'); return; }
+  if (!p.qty || p.qty <= 0) { toast('ปริมาณต้องมากกว่า 0','err'); return; }
+  var ch = DATA.chemicals.find(function(c){ return c.chemId === p.chemId; });
+  if (ch) { if (Number(ch.qtyRemaining) < p.qty) { toast('สารเคมีไม่พอ','err'); return; } ch.qtyRemaining = Number(ch.qtyRemaining) - p.qty; }
+  renderAll(); closeModal(); toast('🧪 บันทึกสำเร็จ','ok');
+  google.script.run.withSuccessHandler(loadData).withFailureHandler(function(e){ toast(e.message,'err'); loadData(); }).apiUseChemical(p);
+}
+
+function doAddExp() {
+  var p = { expName: gv('f0'), researcher: gv('f1'), status: 'Active' };
+  if (!p.expName) { toast('กรอกชื่อโปรเจกต์','err'); return; }
+  closeModal(); toast('🔬 สร้างโปรเจกต์ทดลองสำเร็จ','ok');
+  google.script.run.withSuccessHandler(loadData).withFailureHandler(function(e){ toast(e.message,'err'); }).apiAddExperiment(p);
+}
+
+function doAddItem() {
+  var p = { itemName: gv('f0'), category: gv('f1'), size: gv('f2'), unit: gv('f3'), qtyAvailable: Number(gv('f4')), location: gv('f5') };
+  if (!p.itemName) { toast('กรอกชื่ออุปกรณ์','err'); return; }
+  closeModal(); toast('➕ เพิ่มอุปกรณ์สำเร็จ','ok');
+  google.script.run.withSuccessHandler(loadData).withFailureHandler(function(e){ toast(e.message,'err'); }).apiAddItem(p);
+}
+function doEditItem(id) {
+  var p = { itemId: id, itemName: gv('f0'), category: gv('f1'), size: gv('f2'), unit: gv('f3'), qtyAvailable: Number(gv('f4')), location: gv('f5') };
+  if (!p.itemName) { toast('กรอกชื่ออุปกรณ์','err'); return; }
+  // Optimistic update
+  var it = DATA.items.find(function(i){ return i.itemId === id; });
+  if (it) { it.itemName = p.itemName; it.category = p.category; it.size = p.size; it.unit = p.unit; it.qtyAvailable = p.qtyAvailable; it.location = p.location; }
+  renderAll(); closeModal(); toast('✏️ แก้ไขสำเร็จ','ok');
+  google.script.run.withSuccessHandler(loadData).withFailureHandler(function(e){ toast(e.message,'err'); loadData(); }).apiEditItem(p);
+}
+function doDeleteItem(id) {
+  if (!confirm('ยืนยันลบรายการนี้?')) return;
+  closeModal(); toast('🗑️ ลบสำเร็จ','ok');
+  google.script.run.withSuccessHandler(loadData).withFailureHandler(function(e){ toast(e.message,'err'); loadData(); }).apiDeleteItem({ itemId: id });
+}
+
+function doAddChem() {
+  var p = { chemName: gv('f0'), casNo: gv('f1'), qtyRemaining: Number(gv('f2')), maxQty: Number(gv('f3')), unit: gv('f4'), mfgDate: gv('f5'), expiryDate: gv('f6'), location: gv('f7'), msdsLink: gv('f8') };
+  if (!p.chemName) { toast('กรอกชื่อสารเคมี','err'); return; }
+  closeModal(); toast('➕ เพิ่มสารเคมีสำเร็จ','ok');
+  google.script.run.withSuccessHandler(loadData).withFailureHandler(function(e){ toast(e.message,'err'); }).apiAddChemical(p);
+}
+function doEditChem(id) {
+  var p = { chemId: id, chemName: gv('f0'), casNo: gv('f1'), qtyRemaining: Number(gv('f2')), maxQty: Number(gv('f3')), unit: gv('f4'), mfgDate: gv('f5'), expiryDate: gv('f6'), location: gv('f7'), msdsLink: gv('f8') };
+  if (!p.chemName) { toast('กรอกชื่อสารเคมี','err'); return; }
+  // Optimistic update
+  var ch = DATA.chemicals.find(function(c){ return c.chemId === id; });
+  if (ch) { ch.chemName = p.chemName; ch.casNo = p.casNo; ch.qtyRemaining = p.qtyRemaining; ch.maxQty = p.maxQty; ch.unit = p.unit; ch.mfgDate = p.mfgDate; ch.expiryDate = p.expiryDate; ch.location = p.location; ch.msdsLink = p.msdsLink; }
+  renderAll(); closeModal(); toast('✏️ แก้ไขสำเร็จ','ok');
+  google.script.run.withSuccessHandler(loadData).withFailureHandler(function(e){ toast(e.message,'err'); loadData(); }).apiEditChemical(p);
+}
+function doDeleteChem(id) {
+  if (!confirm('ยืนยันลบสารเคมีนี้?')) return;
+  closeModal(); toast('🗑️ ลบสำเร็จ','ok');
+  google.script.run.withSuccessHandler(loadData).withFailureHandler(function(e){ toast(e.message,'err'); loadData(); }).apiDeleteChemical({ chemId: id });
+}
+
+function doAddLog() {
+  var p = { logDate: gv('f0'), person: gv('f1'), detail: gv('f2') };
+  if (!p.person || !p.detail) { toast('กรอกข้อมูลให้ครบ','err'); return; }
+  DATA.dailyLogs.push({ logId:'tmp', logDate:p.logDate, person:p.person, detail:p.detail });
+  renderAll(); closeModal(); toast('📓 บันทึกสำเร็จ','ok');
+  google.script.run.withSuccessHandler(loadData).withFailureHandler(function(e){ toast(e.message,'err'); }).apiAddDailyLog(p);
+}
+
+function doAddTask() {
+  var p = { title: gv('f0'), detail: gv('f1'), owner: gv('f2'), dueDate: gv('f3') };
+  if (!p.title) { toast('กรอกหัวข้องาน','err'); return; }
+  DATA.tasks.push({ taskId:'tmp', title:p.title, detail:p.detail, owner:p.owner, dueDate:p.dueDate, status:'TODO' });
+  renderAll(); closeModal(); toast('📋 เพิ่มงานสำเร็จ','ok');
+  google.script.run.withSuccessHandler(loadData).withFailureHandler(function(e){ toast(e.message,'err'); }).apiAddTask(p);
+}
+function updateTask(id, status) {
+  var t = DATA.tasks.find(function(t){ return t.taskId === id; });
+  if (t) t.status = status;
+  renderTasks();
+  google.script.run.withSuccessHandler(loadData).withFailureHandler(function(e){ toast(e.message,'err'); loadData(); }).apiUpdateTaskStatus({ taskId:id, status:status });
+}
+
+// ════════════════════════════════════════
+// HELPERS
+// ════════════════════════════════════════
+function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function fmtDate(d) { try { return new Date(d).toLocaleString('th-TH',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}); } catch(e) { return d; } }
+function toast(msg, type) {
+  var c = document.getElementById('toasts'); var el = document.createElement('div');
+  el.className = 'toast ' + type; el.innerHTML = '<span>' + (type==='ok'?'✅':'❌') + '</span><span>' + msg + '</span>';
+  c.appendChild(el);
+  setTimeout(function(){ el.style.opacity='0'; el.style.transition='opacity .3s'; setTimeout(function(){ el.remove(); },300); }, 3000);
+}
+</script>
+</body>
+</html>
