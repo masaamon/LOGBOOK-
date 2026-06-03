@@ -7,9 +7,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
-/* ════════════════════════════════════════
-   TOKENS & CORE STYLES
-════════════════════════════════════════ */
 :root {
   --bg:       #0b0f1a;
   --bg2:      #111827;
@@ -41,13 +38,7 @@ body{
   min-height:100vh;
   overflow-x:hidden;
 }
-
-/* ════════════════════════════════════════
-   LAYOUT
-════════════════════════════════════════ */
 .shell{display:flex;height:100vh;overflow:hidden;}
-
-/* ── Sidebar ── */
 .sidebar{
   width:220px;
   flex-shrink:0;
@@ -74,7 +65,6 @@ body{
 }
 .logo-text{font-size:.85rem;font-weight:600;line-height:1.2;}
 .logo-sub{font-size:.65rem;color:var(--text2);font-family:var(--mono);}
-
 .nav-section{
   padding:16px 12px 0;
   font-size:.6rem;
@@ -112,7 +102,6 @@ body{
   min-width:18px;
   text-align:center;
 }
-
 .sidebar-footer{
   margin-top:auto;
   padding:12px;
@@ -136,10 +125,7 @@ body{
   transition:background .3s;
 }
 .pin-dot.unlocked{background:var(--cyan);box-shadow:0 0 6px var(--cyan);}
-
-/* ── Main ── */
 .main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
-
 .topbar{
   height:56px;
   border-bottom:1px solid var(--border);
@@ -164,16 +150,10 @@ body{
   font-family:var(--sans);
 }
 .btn-reload:hover{color:var(--cyan);border-color:var(--cyan);}
-
 .content{flex:1;overflow-y:auto;padding:20px 24px;}
-
-/* ════════════════════════════════════════
-   PAGES & COMPONENTS
-════════════════════════════════════════ */
 .page{display:none;}
 .page.active{display:block;animation:fadeUp .25s ease;}
 @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-
 .card{
   background:var(--bg2);
   border:1px solid var(--border);
@@ -192,7 +172,6 @@ body{
   display:flex;align-items:center;gap:8px;
 }
 .card-title .ct-right{margin-left:auto;display:flex;gap:6px;}
-
 .stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px;}
 .stat-box{
   background:var(--bg2);
@@ -206,7 +185,6 @@ body{
 .stat-box.red  .sv{color:var(--red);}
 .stat-box.amber .sv{color:var(--amber);}
 .stat-box.blue .sv{color:var(--blue);}
-
 .alert-item{
   display:flex;align-items:center;gap:10px;
   padding:8px 12px;
@@ -219,7 +197,6 @@ body{
 .alert-item.warn{border-left:3px solid var(--amber);}
 .alert-item.crit{border-left:3px solid var(--red);}
 .alert-item.info{border-left:3px solid var(--blue);}
-
 .recent-row{
   display:flex;align-items:center;gap:12px;
   padding:8px 0;
@@ -234,7 +211,6 @@ body{
 .type-pill.OUT{background:var(--red-dim);color:var(--red);}
 .type-pill.IN{background:var(--cyan-dim);color:var(--cyan);}
 .type-pill.CHEM-USE{background:var(--blue-dim);color:var(--blue);}
-
 .filter-bar{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;}
 .filter-chip{
   padding:4px 12px;
@@ -249,7 +225,6 @@ body{
 }
 .filter-chip:hover{border-color:var(--cyan);color:var(--text);}
 .filter-chip.active{background:var(--cyan-dim);border-color:var(--cyan);color:var(--cyan);}
-
 .item-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;}
 .item-card{
   background:var(--bg3);
@@ -282,7 +257,6 @@ body{
   cursor:pointer;transition:all .2s;
 }
 .item-card .ic-edit:hover{color:var(--cyan);border-color:var(--cyan);}
-
 .chem-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;}
 .chem-card{
   background:var(--bg3);
@@ -303,7 +277,6 @@ body{
   cursor:pointer;transition:all .2s;
 }
 .chem-card .cc-edit:hover{color:var(--cyan);border-color:var(--cyan);}
-
 .flask-wrap{margin:0 auto 10px;width:48px;height:64px;position:relative;}
 .flask-wrap svg{width:100%;height:100%;}
 .cc-name{font-size:.78rem;font-weight:600;line-height:1.3;margin-bottom:4px;}
@@ -316,7 +289,6 @@ body{
 .cc-exp.ok{background:var(--cyan-dim);color:var(--cyan);}
 .cc-exp.warn{background:var(--amber-dim);color:var(--amber);}
 .cc-exp.bad{background:var(--red-dim);color:var(--red);}
-
 .notebook{position:relative;}
 .nb-line{
   position:absolute;left:52px;top:0;bottom:0;
@@ -335,7 +307,6 @@ body{
 .le-date{font-size:.68rem;font-family:var(--mono);color:var(--red);margin-bottom:3px;}
 .le-person{font-size:.65rem;color:var(--text2);}
 .le-detail{font-size:.85rem;margin-top:6px;line-height:1.6;}
-
 .task-board{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
 .task-col-head{
   font-size:.7rem;font-family:var(--mono);
@@ -357,7 +328,6 @@ body{
 .task-card .tc-meta{font-size:.65rem;color:var(--text2);font-family:var(--mono);}
 .task-card .tc-detail{font-size:.72rem;color:var(--text2);margin-top:5px;line-height:1.4;}
 .task-card .tc-actions{margin-top:8px;}
-
 .tx-table{width:100%;border-collapse:collapse;font-size:.78rem;}
 .tx-table th{
   padding:8px 12px;text-align:left;
@@ -368,10 +338,6 @@ body{
 }
 .tx-table td{padding:8px 12px;border-bottom:1px solid var(--border);}
 .tx-table tbody tr:hover{background:var(--bg3);}
-
-/* ════════════════════════════════════════
-   MODAL & UI
-════════════════════════════════════════ */
 .overlay{
   display:none;position:fixed;inset:0;
   background:rgba(0,0,0,.6);
@@ -420,7 +386,6 @@ body{
   letter-spacing:.5em;font-size:1.4rem;
   text-align:center;font-family:var(--mono);
 }
-
 .btn{
   padding:8px 18px;border:none;border-radius:8px;
   cursor:pointer;font-size:.8rem;font-weight:500;
@@ -441,8 +406,6 @@ body{
 .btn-amber:hover{background:rgba(255,179,71,.25);}
 .modal-footer{display:flex;justify-content:flex-end;gap:8px;margin-top:20px;}
 .modal-footer.spread{justify-content:space-between;}
-
-/* ── Delete TX button inline ── */
 .tx-del-btn{
   background:transparent;
   border:1px solid rgba(255,77,109,.3);
@@ -456,7 +419,6 @@ body{
   white-space:nowrap;
 }
 .tx-del-btn:hover{background:var(--red-dim);border-color:var(--red);}
-
 .fab{
   position:fixed;bottom:24px;right:24px;
   width:52px;height:52px;border-radius:50%;
@@ -466,7 +428,6 @@ body{
   z-index:100;transition:all .2s;display:flex;align-items:center;justify-content:center;
 }
 .fab:hover{transform:scale(1.1) rotate(45deg);}
-
 .toasts{position:fixed;top:16px;right:16px;z-index:300;display:flex;flex-direction:column;gap:8px;}
 .toast{
   background:var(--bg2);
@@ -481,7 +442,6 @@ body{
 .toast.ok{border-left:3px solid var(--cyan);}
 .toast.err{border-left:3px solid var(--red);}
 @keyframes slideIn{from{transform:translateX(110%);opacity:0}to{transform:translateX(0);opacity:1}}
-
 .skel{
   background:linear-gradient(90deg,var(--bg3) 25%,var(--bg2) 50%,var(--bg3) 75%);
   background-size:200% 100%;
@@ -490,91 +450,105 @@ body{
 }
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 .empty{padding:32px;text-align:center;color:var(--text3);font-size:.82rem;}
-
 .bottom-nav{display:none;}
 .mobile-pin-btn{display:none;}
-/* ════════════════════════════════════════
-   CALENDAR DASHBOARD
-════════════════════════════════════════ */
-.calendar-header { 
-  display: flex; 
-  justify-content: space-between; 
-  align-items: center; 
-  margin-bottom: 16px; 
+/* CALENDAR */
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
 }
-.calendar-header button { 
-  background: var(--bg3); 
-  border: 1px solid var(--border); 
-  color: var(--text); 
-  padding: 6px 14px; 
-  border-radius: 8px; 
-  cursor: pointer; 
-  transition: all .2s; 
-  font-family: var(--mono); 
+.calendar-header button {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 6px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all .2s;
+  font-family: var(--mono);
 }
-.calendar-header button:hover { 
-  border-color: var(--cyan); 
-  color: var(--cyan); 
-  background: var(--cyan-dim); 
+.calendar-header button:hover {
+  border-color: var(--cyan);
+  color: var(--cyan);
+  background: var(--cyan-dim);
 }
-.calendar-grid { 
-  display: grid; 
-  grid-template-columns: repeat(7, 1fr); 
-  gap: 6px; 
-  text-align: center; 
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  text-align: center;
 }
-.cal-day-head { 
-  font-size: .7rem; 
-  color: var(--text3); 
-  font-family: var(--mono); 
-  padding-bottom: 6px; 
+.cal-day-head {
+  font-size: .7rem;
+  color: var(--text3);
+  font-family: var(--mono);
+  padding-bottom: 6px;
 }
-.cal-day { 
-  background: var(--bg2); 
-  border: 1px solid var(--border); 
-  border-radius: 8px; 
-  padding: 12px 4px; 
-  font-size: .85rem; 
-  font-family: var(--mono); 
-  cursor: pointer; 
-  transition: all .2s; 
+.cal-day {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 4px;
+  font-size: .85rem;
+  font-family: var(--mono);
+  cursor: pointer;
+  transition: all .2s;
 }
-.cal-day:hover:not(.empty) { 
-  border-color: var(--border2); 
-  background: var(--bg3); 
-  transform: translateY(-2px); 
+.cal-day:hover:not(.empty-day) {
+  border-color: var(--border2);
+  background: var(--bg3);
+  transform: translateY(-2px);
 }
-.cal-day.empty { 
-  background: transparent; 
-  border-color: transparent; 
-  cursor: default; 
+.cal-day.empty-day {
+  background: transparent;
+  border-color: transparent;
+  cursor: default;
 }
-.cal-day.has-log { 
-  border-color: var(--cyan); 
-  color: var(--cyan); 
-  font-weight: 600; 
-  background: linear-gradient(135deg, rgba(0,229,195,0.1), transparent); 
+.cal-day.has-log {
+  border-color: var(--cyan);
+  color: var(--cyan);
+  font-weight: 600;
+  background: linear-gradient(135deg, rgba(0,229,195,0.1), transparent);
   box-shadow: inset 0 0 0 1px rgba(0,229,195,0.2);
 }
-.cal-day.active { 
-  background: var(--cyan); 
-  color: #0b0f1a; 
-  border-color: var(--cyan); 
-  font-weight: 600; 
-  box-shadow: 0 4px 12px rgba(0,229,195,0.3); 
-  transform: translateY(-2px); 
+.cal-day.active {
+  background: var(--cyan);
+  color: #0b0f1a;
+  border-color: var(--cyan);
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(0,229,195,0.3);
+  transform: translateY(-2px);
 }
-
-/* ════════════════════════════════════════
-   RESPONSIVE
-════════════════════════════════════════ */
+/* LAB RECORD */
+.lab-input { width: 65px; padding: 4px; background: var(--bg); border: 1px solid var(--border); border-radius: 4px; color: var(--cyan); font-family: var(--mono); font-size: .8rem; text-align: center; transition: all .2s; }
+.lab-input:focus { outline: none; border-color: var(--cyan); background: var(--bg2); }
+.lab-input::-webkit-outer-spin-button, .lab-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.lab-res { font-family: var(--mono); color: var(--text); font-weight: 600; }
+.lab-pct { font-family: var(--mono); color: var(--cyan); font-weight: 600; }
+/* biochar type indicator */
+.biochar-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: .72rem;
+  font-family: var(--mono);
+  font-weight: 600;
+  margin-left: 8px;
+}
+.biochar-indicator.unmodified { background: rgba(139,69,19,0.2); color: #d2691e; border: 1px solid rgba(139,69,19,0.4); }
+.biochar-indicator.cacl2 { background: rgba(91,141,238,0.15); color: var(--blue); border: 1px solid rgba(91,141,238,0.3); }
+.biochar-indicator.chitosan { background: rgba(0,229,195,0.15); color: var(--cyan); border: 1px solid rgba(0,229,195,0.3); }
+/* RESPONSIVE */
 @media(max-width:900px){
   .sidebar{width:180px;}
   .stat-row{grid-template-columns:repeat(2,1fr);}
   .task-board{grid-template-columns:1fr;}
   .fab{bottom:80px;}
 }
-
 @media(max-width:640px){
   .sidebar{display:none;}
   .fab{display:none;}
@@ -597,7 +571,6 @@ body{
   .nb-line{left:36px;}
   .log-entry{padding:10px 10px 10px 56px;}
   .log-entry::before{left:30px;}
-
   .bottom-nav{
     display:flex;
     position:fixed;
@@ -673,19 +646,15 @@ body{
 </style>
 </head>
 <body>
-
 <div class="shell">
-
-  <!-- ═══ Sidebar ═══ -->
   <aside class="sidebar">
     <div class="sidebar-logo">
       <div class="logo-icon">🔬</div>
       <div>
         <div class="logo-text">Lab Logbook</div>
-        <div class="logo-sub">v2.1</div>
+        <div class="logo-sub">v2.2</div>
       </div>
     </div>
-
     <div class="nav-section" style="margin-top:12px">ภาพรวม</div>
     <nav id="mainNav">
       <div class="nav-item active" data-page="dashboard"><span class="nav-icon">📊</span>Dashboard</div>
@@ -694,11 +663,11 @@ body{
       <div class="nav-item" data-page="chemicals"><span class="nav-icon">🧪</span>ตู้สารเคมี</div>
       <div class="nav-section">บันทึก</div>
       <div class="nav-item" data-page="experiments"><span class="nav-icon">🔬</span>โปรเจกต์ (Lab)</div>
+      <div class="nav-item" data-page="labrecord" style="padding-left: 36px; font-size: .78rem;"><span class="nav-icon">📝</span>บันทึกค่า</div>
       <div class="nav-item" data-page="logs"><span class="nav-icon">📓</span>บันทึกการทดลอง</div>
       <div class="nav-item" data-page="tasks"><span class="nav-icon">📋</span>งานประกาศ</div>
       <div class="nav-item" data-page="history"><span class="nav-icon">📜</span>ประวัติเบิก-คืน</div>
     </nav>
-
     <div class="sidebar-footer">
       <div class="pin-status" id="pinStatus" onclick="showPinModal()">
         <div class="pin-dot" id="pinDot"></div>
@@ -707,7 +676,6 @@ body{
     </div>
   </aside>
 
-  <!-- ═══ Main ═══ -->
   <div class="main">
     <div class="topbar">
       <div class="page-title" id="pageTitle">Dashboard</div>
@@ -720,10 +688,9 @@ body{
         </div>
       </div>
     </div>
-
     <div class="content">
 
-      <!-- Dashboard -->
+      <!-- ═══ PAGE: DASHBOARD ═══ -->
       <div class="page active" id="page-dashboard">
         <div class="card">
           <div class="calendar-header">
@@ -735,15 +702,13 @@ body{
             <div class="skel" style="height:200px; grid-column: span 7;"></div>
           </div>
         </div>
-
         <div class="card" id="calLogDetailsCard" style="display:none; margin-top: 16px;">
           <div class="card-title" id="calLogDetailsTitle">📓 บันทึกการทดลอง</div>
-          <div class="notebook" id="calLogDetailsList">
-            </div>
+          <div class="notebook" id="calLogDetailsList"></div>
         </div>
       </div>
 
-      <!-- Items -->
+      <!-- ═══ PAGE: ITEMS ═══ -->
       <div class="page" id="page-items">
         <div class="card">
           <div class="card-title">
@@ -759,7 +724,7 @@ body{
         </div>
       </div>
 
-      <!-- Chemicals -->
+      <!-- ═══ PAGE: CHEMICALS ═══ -->
       <div class="page" id="page-chemicals">
         <div class="card">
           <div class="card-title">
@@ -773,7 +738,7 @@ body{
         </div>
       </div>
 
-      <!-- Experiments -->
+      <!-- ═══ PAGE: EXPERIMENTS ═══ -->
       <div class="page" id="page-experiments">
         <div class="card">
           <div class="card-title">
@@ -786,7 +751,76 @@ body{
         </div>
       </div>
 
-      <!-- Logs -->
+      <!-- ═══ PAGE: LAB RECORD (FIXED - single clean version) ═══ -->
+      <div class="page" id="page-labrecord">
+        <div class="card">
+          <div class="card-title">📝 บันทึกผลการทดลอง (Auto-Save)
+            <span class="biochar-indicator unmodified" id="biocharBadge">🔥 ถ่านไบโอชาร์</span>
+          </div>
+          <div class="form-row two">
+            <div class="form-row">
+              <label>ชื่อโปรเจกต์</label>
+              <input type="text" value="การดูดซับอินทรีย์วัตถุธรรมชาติ (NOM)" readonly style="opacity:.7">
+            </div>
+            <div class="form-row">
+              <label>ค่า UV254 เริ่มต้น (Initial)</label>
+              <input type="number" id="labInitialUv" step="0.001" value="0.850">
+            </div>
+          </div>
+          <div class="form-row">
+            <label>วัสดุที่ใช้ทดสอบ (ข้อมูลจะแยกและเซฟอัตโนมัติตามชนิด)</label>
+            <div style="display:flex; gap:16px; font-size:.8rem; margin-top:6px; flex-wrap:wrap;">
+              <label style="cursor:pointer; display:flex; align-items:center; gap:4px;">
+                <input type="radio" name="labBiocharType" value="unmodified" checked> 🔥 ถ่านไบโอชาร์
+              </label>
+              <label style="cursor:pointer; display:flex; align-items:center; gap:4px;">
+                <input type="radio" name="labBiocharType" value="cacl2"> 🧂 ถ่านแคลเซียมคลอไรด์
+              </label>
+              <label style="cursor:pointer; display:flex; align-items:center; gap:4px;">
+                <input type="radio" name="labBiocharType" value="chitosan"> 🦐 ถ่านไคโตซาน
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="filter-bar" style="margin-bottom:16px;">
+          <button class="filter-chip active" id="btn-tab-ph" onclick="switchLabTab('ph')">📌 ผลของ pH</button>
+          <button class="filter-chip" id="btn-tab-dosage" onclick="switchLabTab('dosage')">📌 ปริมาณ (Dosage)</button>
+          <button class="filter-chip" id="btn-tab-time" onclick="switchLabTab('time')">📌 เวลา (Kinetics)</button>
+        </div>
+
+        <div class="card lab-tab" id="tab-ph">
+          <div class="card-title" style="font-size:.7rem;">ผลของ pH ต่อการดูดซับ</div>
+          <div style="overflow-x:auto;">
+            <table class="tx-table" id="table-ph">
+              <thead><tr><th>ค่า pH</th><th>ซ้ำ 1</th><th>ซ้ำ 2</th><th>ซ้ำ 3</th><th>📊 เฉลี่ย</th><th>📉 % กำจัด</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card lab-tab" id="tab-dosage" style="display:none;">
+          <div class="card-title" style="font-size:.7rem;">ผลของปริมาณตัวดูดซับ (Dosage)</div>
+          <div style="overflow-x:auto;">
+            <table class="tx-table" id="table-dosage">
+              <thead><tr><th>ปริมาณ (g/L)</th><th>ซ้ำ 1</th><th>ซ้ำ 2</th><th>ซ้ำ 3</th><th>📊 เฉลี่ย</th><th>📉 % กำจัด</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card lab-tab" id="tab-time" style="display:none;">
+          <div class="card-title" style="font-size:.7rem;">ผลของเวลาสัมผัส (Kinetics)</div>
+          <div style="overflow-x:auto;">
+            <table class="tx-table" id="table-time">
+              <thead><tr><th>เวลา (ชม.)</th><th>ซ้ำ 1</th><th>ซ้ำ 2</th><th>ซ้ำ 3</th><th>📊 เฉลี่ย</th><th>📉 % กำจัด</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ PAGE: LOGS ═══ -->
       <div class="page" id="page-logs">
         <div class="card">
           <div class="card-title">
@@ -802,7 +836,7 @@ body{
         </div>
       </div>
 
-      <!-- Tasks -->
+      <!-- ═══ PAGE: TASKS ═══ -->
       <div class="page" id="page-tasks">
         <div class="card">
           <div class="card-title">
@@ -815,7 +849,7 @@ body{
         </div>
       </div>
 
-      <!-- History -->
+      <!-- ═══ PAGE: HISTORY ═══ -->
       <div class="page" id="page-history">
         <div class="card">
           <div class="card-title">
@@ -847,7 +881,7 @@ body{
   </div><!-- /main -->
 </div><!-- /shell -->
 
-<!-- ═══ Bottom Navigation Bar ═══ -->
+<!-- BOTTOM NAV (MOBILE) -->
 <nav class="bottom-nav" id="bottomNav">
   <div class="bn-item active" data-page="dashboard" id="bn-dashboard"><span class="bn-icon">📊</span></div>
   <div class="bn-item" data-page="items" id="bn-items"><span class="bn-icon">🗄️</span></div>
@@ -859,8 +893,6 @@ body{
 
 <button class="fab" onclick="openModal('quickAction')" title="Quick Action">+</button>
 <div class="toasts" id="toasts"></div>
-
-<!-- ═══ Modal ═══ -->
 <div class="overlay" id="overlay" onclick="handleOverlayClick(event)">
   <div class="modal" id="modal" onclick="event.stopPropagation()"></div>
 </div>
@@ -869,23 +901,29 @@ body{
 // ════════════════════════════════════════
 // STATE
 // ════════════════════════════════════════
-var DATA = { items:[], chemicals:[], tasks:[], dailyLogs:[], transactions:[], experiments:[] };
+var DATA = { items:[], chemicals:[], tasks:[], dailyLogs:[], transactions:[], experiments:[], labRecords:[] };
 var currentFilter  = 'ทั้งหมด';
-var PIN            = 'leo';
+var PIN            = '000';
 var pinUnlocked    = false;
 var pinTimer       = null;
 var pinRemaining   = 0;
 var pendingAction  = null;
 var pendingExtra   = null;
-
+var currentBiocharType = 'unmodified';
 var PAGE_TITLES = {
   dashboard: 'Dashboard',
   items: 'ตู้อุปกรณ์',
   chemicals: 'ตู้สารเคมี',
   experiments: 'โปรเจกต์การทดลอง',
+  labrecord: 'บันทึกค่าการทดลอง',
   logs: 'บันทึกการทดลอง',
   tasks: 'งานประกาศ',
   history: 'ประวัติเบิก-คืน'
+};
+var BIOCHAR_NAMES = {
+  unmodified: '🔥 ถ่านไบโอชาร์',
+  cacl2: '🧂 ถ่านแคลเซียมคลอไรด์',
+  chitosan: '🦐 ถ่านไคโตซาน'
 };
 
 // ════════════════════════════════════════
@@ -894,6 +932,7 @@ var PAGE_TITLES = {
 document.addEventListener('DOMContentLoaded', function() {
   setupNav();
   setupBottomNav();
+  initLabSystem();
   loadData();
   updatePinUI();
 });
@@ -937,14 +976,12 @@ function renderAll() {
 function navigateTo(page) {
   document.querySelectorAll('.nav-item[data-page]').forEach(function(n){ n.classList.remove('active'); });
   var sideItem = document.querySelector('.nav-item[data-page="' + page + '"]');
-if (sideItem) sideItem.classList.add('active');
-
+  if (sideItem) sideItem.classList.add('active');
   document.querySelectorAll('.bn-item[data-page]').forEach(function(n){ n.classList.remove('active'); });
   var bnItem = document.querySelector('.bn-item[data-page="' + page + '"]');
   if (bnItem) bnItem.classList.add('active');
-
   document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
-document.getElementById('page-' + page).classList.add('active');
+  document.getElementById('page-' + page).classList.add('active');
   document.getElementById('pageTitle').textContent = PAGE_TITLES[page] || page;
 }
 
@@ -953,6 +990,7 @@ function setupNav() {
     el.addEventListener('click', function() { navigateTo(el.dataset.page); });
   });
 }
+
 function setupBottomNav() {
   document.querySelectorAll('.bn-item[data-page]').forEach(function(el) {
     el.addEventListener('click', function() { navigateTo(el.dataset.page); });
@@ -960,7 +998,7 @@ function setupBottomNav() {
 }
 
 // ════════════════════════════════════════
-// DASHBOARD (CALENDAR VIEW)
+// DASHBOARD (CALENDAR ONLY)
 // ════════════════════════════════════════
 var calCurrentDate = new Date();
 
@@ -978,11 +1016,9 @@ function renderCalendar() {
   var m = calCurrentDate.getMonth();
   var firstDay = new Date(y, m, 1).getDay();
   var daysInMonth = new Date(y, m + 1, 0).getDate();
-
   var monthsTH = ["มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน","กรกฎาคม","สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม"];
   document.getElementById('calMonthYear').textContent = monthsTH[m] + ' ' + (y + 543);
 
-  // ดึงข้อมูลจาก DATA.dailyLogs ที่โหลดมารอไว้แล้ว (O(N) Speed)
   var logDays = {};
   if (DATA && DATA.dailyLogs) {
     DATA.dailyLogs.forEach(function(l) {
@@ -994,24 +1030,18 @@ function renderCalendar() {
   }
 
   var html = '<div class="cal-day-head">อา</div><div class="cal-day-head">จ</div><div class="cal-day-head">อ</div><div class="cal-day-head">พ</div><div class="cal-day-head">พฤ</div><div class="cal-day-head">ศ</div><div class="cal-day-head">ส</div>';
-
-  // ช่องว่างวันก่อนหน้าเริ่มต้นเดือน
   for (var i = 0; i < firstDay; i++) {
-    html += '<div class="cal-day empty"></div>';
+    html += '<div class="cal-day empty-day"></div>';
   }
-  
-  // สร้างช่องวันที่
   for (var d = 1; d <= daysInMonth; d++) {
     var cls = 'cal-day';
     var onClick = '';
-    
     if (logDays[d]) {
       cls += ' has-log';
       onClick = 'onclick="showLogsForDate(' + y + ',' + m + ',' + d + ', this)"';
     }
     html += '<div class="' + cls + '" ' + onClick + '>' + d + '</div>';
   }
-  
   document.getElementById('calGrid').innerHTML = html;
   document.getElementById('calLogDetailsCard').style.display = 'none';
 }
@@ -1019,31 +1049,25 @@ function renderCalendar() {
 function showLogsForDate(y, m, d, el) {
   document.querySelectorAll('.cal-day').forEach(function(n){ n.classList.remove('active'); });
   if (el) el.classList.add('active');
-
   var targetDateStr = new Date(y, m, d).toDateString();
   var dayLogs = DATA.dailyLogs.filter(function(l) {
     return new Date(l.logDate).toDateString() === targetDateStr;
   });
-
   var detailsCard = document.getElementById('calLogDetailsCard');
   var detailsList = document.getElementById('calLogDetailsList');
   var detailsTitle = document.getElementById('calLogDetailsTitle');
-
   if (dayLogs.length === 0) {
     detailsCard.style.display = 'none';
     return;
   }
-
   var monthsTH = ["มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน","กรกฎาคม","สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม"];
   detailsTitle.textContent = '📓 บันทึกวันที่ ' + d + ' ' + monthsTH[m] + ' ' + (y + 543);
-  
   detailsList.innerHTML = '<div class="nb-line" style="left:26px;"></div>' + dayLogs.map(function(l) {
     return '<div class="log-entry" style="padding-left:46px;">' +
       '<div class="le-person" style="font-family:var(--mono);">👤 ' + l.person + '</div>' +
       '<div class="le-detail">' + fmtLogDetail(l.detail) + '</div>' +
       '</div>';
   }).join('');
-  
   detailsCard.style.display = 'block';
   detailsCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
@@ -1055,7 +1079,6 @@ function updateAlertBadge() {
   DATA.chemicals.forEach(function(c){
     if (c.expiryDate && (new Date(c.expiryDate)-now)/86400000 < 30) cnt++;
   });
-
   var badge = document.querySelector('.nav-item[data-page="dashboard"] .nav-badge');
   if (!badge) {
     badge = document.createElement('span');
@@ -1064,7 +1087,6 @@ function updateAlertBadge() {
   }
   badge.textContent = cnt;
   badge.style.display = cnt > 0 ? '' : 'none';
-
   var bnDash = document.getElementById('bn-dashboard');
   if (bnDash) {
     var bnBadge = bnDash.querySelector('.bn-badge');
@@ -1086,11 +1108,13 @@ function getCategories() {
   DATA.items.forEach(function(i) { if (i.category && cats.indexOf(i.category) < 0) cats.push(i.category); });
   return cats;
 }
+
 function renderItemFilters() {
   document.getElementById('itemFilters').innerHTML = getCategories().map(function(c) {
     return '<button class="filter-chip' + (c === currentFilter ? ' active' : '') + '" onclick="setFilter(\'' + esc(c) + '\')">' + c + '</button>';
   }).join('');
 }
+
 function setFilter(cat) { currentFilter = cat; renderItemFilters(); renderItems(); }
 
 function renderItems() {
@@ -1137,7 +1161,6 @@ function renderChemicals() {
       '<clipPath id="c' + ch.chemId + '"><path d="M14 16 L6 54 Q4 62 12 62 L36 62 Q44 62 42 54 L34 16 Z"/></clipPath>' +
       '<rect clip-path="url(#c' + ch.chemId + ')" x="0" y="' + (62 - (46 * pct/100)) + '" width="48" height="46" fill="' + fill + '" opacity=".7"/>' +
       '</svg>';
-
     return '<div class="chem-card">' +
       '<div class="cc-edit" onclick="requirePin(\'editChem\',\'' + ch.chemId + '\')">✏️</div>' +
       '<div class="flask-wrap">' + flaskSvg + '</div>' +
@@ -1155,12 +1178,11 @@ function renderExperiments() {
   }
   document.getElementById('expGrid').innerHTML = DATA.experiments.map(function(ex) {
     var usedTxs = DATA.transactions.filter(function(t) { return t.type === 'CHEM-USE' && t.expId === ex.expId; });
-    var chemCount = usedTxs.length;
     return '<div class="item-card" onclick="expDetail(\'' + ex.expId + '\')">' +
       '<div class="ic-loc" style="color:var(--cyan)">' + (ex.status || 'Active') + '</div>' +
       '<div style="font-size:1.3rem;margin-bottom:6px">🧪</div>' +
       '<div class="ic-name">' + ex.expName + '</div>' +
-      '<div class="ic-size">สารเคมีที่เบิกใช้: ' + chemCount + ' รายการ</div>' +
+      '<div class="ic-size">สารเคมีที่เบิกใช้: ' + usedTxs.length + ' รายการ</div>' +
       '</div>';
   }).join('');
 }
@@ -1168,9 +1190,7 @@ function renderExperiments() {
 function expDetail(id) {
   var ex = DATA.experiments.find(function(e) { return e.expId === id; });
   if (!ex) return;
-
   var usedTxs = DATA.transactions.filter(function(t) { return t.type === 'CHEM-USE' && t.expId === id; });
-
   var chemHtml = '';
   if (usedTxs.length) {
     chemHtml = usedTxs.map(function(t) {
@@ -1186,9 +1206,7 @@ function expDetail(id) {
   } else {
     chemHtml = '<div class="empty" style="padding:10px">ยังไม่มีการเบิกสารเคมีเข้าแลปนี้</div>';
   }
-
   var lockNote = pinUnlocked ? '' : '<div style="font-size:.65rem;color:var(--text3);text-align:right;margin-bottom:6px">🔒 ปลดล็อคเพื่อลบรายการ</div>';
-
   setModal(
     '<h2>🔬 ' + ex.expName + '</h2>' +
     '<p style="font-size:.8rem;color:var(--text2);margin-bottom:14px">ผู้วิจัย: ' + (ex.researcher || '-') + '</p>' +
@@ -1216,13 +1234,13 @@ function renderLogs() {
       '</div>';
   }).join('');
 }
+
 function fmtLogDetail(d) { return d ? String(d).replace(/\n/g, '<br>') : ''; }
 
 function renderTasks() {
   var todo  = DATA.tasks.filter(function(t){ return t.status === 'TODO'; });
   var doing = DATA.tasks.filter(function(t){ return t.status === 'DOING'; });
   var done  = DATA.tasks.filter(function(t){ return t.status === 'DONE'; });
-
   function col(tasks, label, cls, nextStatus, nextLabel) {
     return '<div class="task-col"><div class="task-col-head ' + cls + '">' + label + ' (' + tasks.length + ')</div>' +
       tasks.map(function(t) {
@@ -1234,7 +1252,6 @@ function renderTasks() {
           '</div>';
       }).join('') + '</div>';
   }
-
   document.getElementById('taskBoard').innerHTML =
     col(todo,  '📌 รอทำ',    'todo',  'DOING', 'กำลังทำ') +
     col(doing, '🔄 กำลังทำ', 'doing', 'DONE',  'เสร็จ') +
@@ -1268,7 +1285,6 @@ function renderTx() {
 // ════════════════════════════════════════
 function confirmDeleteTx(txId, name, qty) {
   if (!pinUnlocked) { toast('🔒 ปลดล็อคก่อนลบ', 'err'); return; }
-
   var typeMap = {};
   DATA.transactions.forEach(function(t){ typeMap[t.txId] = t.type; });
   var txType = typeMap[txId] || '';
@@ -1276,7 +1292,6 @@ function confirmDeleteTx(txId, name, qty) {
   if (txType === 'CHEM-USE') reverseNote = 'สารเคมีจะถูกคืนสต็อก ' + qty + ' หน่วย';
   else if (txType === 'OUT') reverseNote = 'อุปกรณ์จะถูกคืนสต็อก ' + qty + ' หน่วย';
   else if (txType === 'IN') reverseNote = 'อุปกรณ์จะถูกหักสต็อก ' + qty + ' หน่วย';
-
   setModal(
     '<h2>🗑️ ยืนยันลบรายการ</h2>' +
     '<p style="font-size:.85rem;margin-bottom:10px">รายการ: <strong>' + name + '</strong></p>' +
@@ -1291,8 +1306,8 @@ function confirmDeleteTx(txId, name, qty) {
 
 function doDeleteTx(txId) {
   var idx = -1;
-  for (var _i = 0; _i < DATA.transactions.length; _i++) {
-    if (DATA.transactions[_i].txId === txId) { idx = _i; break; }
+  for (var i = 0; i < DATA.transactions.length; i++) {
+    if (DATA.transactions[i].txId === txId) { idx = i; break; }
   }
   var removed = null;
   if (idx > -1) { removed = DATA.transactions.splice(idx, 1)[0]; }
@@ -1329,7 +1344,6 @@ function itemDetail(id) {
   var txs  = DATA.transactions.filter(function(t){ return t.itemId === id; }).slice(-5).reverse();
   var q    = Number(item.qtyAvailable);
   var qc   = q <= 0 ? 'red' : q <= 2 ? 'amber' : 'cyan';
-
   setModal(
     '<h2>' + item.itemName + '</h2>' +
     '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0">' +
@@ -1349,7 +1363,6 @@ function itemDetail(id) {
 
 function openModal(type, extra) {
   var html = '';
-
   if (type === 'quickAction') {
     html = '<h2>⚡ Quick Action</h2>' +
       '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0">' +
@@ -1370,23 +1383,22 @@ function openModal(type, extra) {
       '<div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal()">ยกเลิก</button><button class="btn btn-primary" onclick="doCheckout()">เบิก</button></div>';
   }
   else if (type === 'return') {
-    var opts = DATA.items.map(function(i){ return '<option value="' + i.itemId + '">' + i.itemName + '</option>'; }).join('');
+    var opts2 = DATA.items.map(function(i){ return '<option value="' + i.itemId + '">' + i.itemName + '</option>'; }).join('');
     html = '<h2>📥 คืนอุปกรณ์</h2>' +
-      field('เลือกรายการ','<select id="f0">' + opts + '</select>') +
+      field('เลือกรายการ','<select id="f0">' + opts2 + '</select>') +
       field('จำนวน','<input type="number" id="f1" min="1" value="1">') +
       field('ผู้คืน','<input type="text" id="f2" placeholder="ชื่อ-นามสกุล">') +
       field('หมายเหตุ','<input type="text" id="f3">') +
       '<div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal()">ยกเลิก</button><button class="btn btn-primary" onclick="doReturn()">คืน</button></div>';
   }
   else if (type === 'useChem') {
-    var opts = DATA.chemicals.map(function(c){ return '<option value="' + c.chemId + '">' + c.chemName + ' (เหลือ ' + c.qtyRemaining + ' ' + (c.unit||'mL') + ')</option>'; }).join('');
+    var chemOpts = DATA.chemicals.map(function(c){ return '<option value="' + c.chemId + '">' + c.chemName + ' (เหลือ ' + c.qtyRemaining + ' ' + (c.unit||'mL') + ')</option>'; }).join('');
     var expOpts = '<option value="">-- เบิกทั่วไป (ไม่ระบุแลป) --</option>' +
       (DATA.experiments || []).map(function(ex){
         return '<option value="' + ex.expId + '" ' + (extra === ex.expId ? 'selected' : '') + '>' + ex.expName + '</option>';
       }).join('');
-
     html = '<h2>🧪 บันทึกการใช้สารเคมี</h2>' +
-      field('สารเคมี','<select id="f0">' + opts + '</select>') +
+      field('สารเคมี','<select id="f0">' + chemOpts + '</select>') +
       field('ปริมาณที่ใช้','<input type="number" id="f1" min="0.01" step="0.01" value="1">') +
       field('ผู้ใช้','<input type="text" id="f2" placeholder="ชื่อ-นามสกุล">') +
       field('ใช้สำหรับการทดลอง (ถ้ามี)','<select id="f_exp">' + expOpts + '</select>') +
@@ -1467,7 +1479,6 @@ function openModal(type, extra) {
       field('กำหนดเสร็จ','<input type="date" id="f3">') +
       '<div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal()">ยกเลิก</button><button class="btn btn-primary" onclick="doAddTask()">เพิ่ม</button></div>';
   }
-
   setModal(html);
 }
 
@@ -1592,15 +1603,16 @@ function doAddItem() {
   closeModal(); toast('➕ เพิ่มอุปกรณ์สำเร็จ','ok');
   google.script.run.withSuccessHandler(loadData).withFailureHandler(function(e){ toast(e.message,'err'); }).apiAddItem(p);
 }
+
 function doEditItem(id) {
   var p = { itemId: id, itemName: gv('f0'), category: gv('f1'), size: gv('f2'), unit: gv('f3'), qtyAvailable: Number(gv('f4')), location: gv('f5') };
   if (!p.itemName) { toast('กรอกชื่ออุปกรณ์','err'); return; }
-  // Optimistic update
   var it = DATA.items.find(function(i){ return i.itemId === id; });
   if (it) { it.itemName = p.itemName; it.category = p.category; it.size = p.size; it.unit = p.unit; it.qtyAvailable = p.qtyAvailable; it.location = p.location; }
   renderAll(); closeModal(); toast('✏️ แก้ไขสำเร็จ','ok');
   google.script.run.withSuccessHandler(loadData).withFailureHandler(function(e){ toast(e.message,'err'); loadData(); }).apiEditItem(p);
 }
+
 function doDeleteItem(id) {
   if (!confirm('ยืนยันลบรายการนี้?')) return;
   closeModal(); toast('🗑️ ลบสำเร็จ','ok');
@@ -1613,15 +1625,16 @@ function doAddChem() {
   closeModal(); toast('➕ เพิ่มสารเคมีสำเร็จ','ok');
   google.script.run.withSuccessHandler(loadData).withFailureHandler(function(e){ toast(e.message,'err'); }).apiAddChemical(p);
 }
+
 function doEditChem(id) {
   var p = { chemId: id, chemName: gv('f0'), casNo: gv('f1'), qtyRemaining: Number(gv('f2')), maxQty: Number(gv('f3')), unit: gv('f4'), mfgDate: gv('f5'), expiryDate: gv('f6'), location: gv('f7'), msdsLink: gv('f8') };
   if (!p.chemName) { toast('กรอกชื่อสารเคมี','err'); return; }
-  // Optimistic update
   var ch = DATA.chemicals.find(function(c){ return c.chemId === id; });
   if (ch) { ch.chemName = p.chemName; ch.casNo = p.casNo; ch.qtyRemaining = p.qtyRemaining; ch.maxQty = p.maxQty; ch.unit = p.unit; ch.mfgDate = p.mfgDate; ch.expiryDate = p.expiryDate; ch.location = p.location; ch.msdsLink = p.msdsLink; }
   renderAll(); closeModal(); toast('✏️ แก้ไขสำเร็จ','ok');
   google.script.run.withSuccessHandler(loadData).withFailureHandler(function(e){ toast(e.message,'err'); loadData(); }).apiEditChemical(p);
 }
+
 function doDeleteChem(id) {
   if (!confirm('ยืนยันลบสารเคมีนี้?')) return;
   closeModal(); toast('🗑️ ลบสำเร็จ','ok');
@@ -1643,6 +1656,7 @@ function doAddTask() {
   renderAll(); closeModal(); toast('📋 เพิ่มงานสำเร็จ','ok');
   google.script.run.withSuccessHandler(loadData).withFailureHandler(function(e){ toast(e.message,'err'); }).apiAddTask(p);
 }
+
 function updateTask(id, status) {
   var t = DATA.tasks.find(function(t){ return t.taskId === id; });
   if (t) t.status = status;
@@ -1660,6 +1674,263 @@ function toast(msg, type) {
   el.className = 'toast ' + type; el.innerHTML = '<span>' + (type==='ok'?'✅':'❌') + '</span><span>' + msg + '</span>';
   c.appendChild(el);
   setTimeout(function(){ el.style.opacity='0'; el.style.transition='opacity .3s'; setTimeout(function(){ el.remove(); },300); }, 3000);
+}
+
+// ════════════════════════════════════════
+// LAB RECORD SYSTEM (COMPLETELY REWRITTEN)
+// ════════════════════════════════════════
+var LAB_PH_VALS  = [2, 5, 7, 9, 11, 12];
+var LAB_DOS_VALS = [0.2, 0.5, 0.7, 1.0, 1.5];
+var LAB_TIM_VALS = [3, 6, 12, 24, 36];
+
+// สร้าง key ที่ปลอดภัยจากค่าตัวเลข (แปลง . เป็น _)
+function safeKey(v) {
+  return String(v).replace(/\./g, '_');
+}
+
+// สร้าง storage key สำหรับถ่านแต่ละชนิด
+function storageKey(type) {
+  return 'LAB_DATA_v2_' + type;
+}
+
+// สร้างข้อมูลเปล่าสำหรับถ่าน 1 ชนิด
+function createEmptyLabData() {
+  return {
+    initialUv: 0.850,
+    ph: {},
+    dos: {},
+    tim: {}
+  };
+}
+
+// โหลดข้อมูลจาก localStorage
+function loadLabData(type) {
+  try {
+    var raw = localStorage.getItem(storageKey(type));
+    if (raw) return JSON.parse(raw);
+  } catch(e) {}
+  return createEmptyLabData();
+}
+
+// เซฟข้อมูลลง localStorage
+function saveLabData(type, data) {
+  try {
+    localStorage.setItem(storageKey(type), JSON.stringify(data));
+  } catch(e) {
+    console.error('Save failed:', e);
+  }
+}
+
+// อ่านค่าจาก DOM ตารางทั้งหมดเป็น object
+function collectLabDataFromDOM() {
+  var data = {
+    initialUv: parseFloat(document.getElementById('labInitialUv').value) || 0.850,
+    ph: {},
+    dos: {},
+    tim: {}
+  };
+
+  LAB_PH_VALS.forEach(function(v) {
+    var k = safeKey(v);
+    data.ph[k] = [
+      document.getElementById('lab-ph-' + k + '-1').value,
+      document.getElementById('lab-ph-' + k + '-2').value,
+      document.getElementById('lab-ph-' + k + '-3').value
+    ];
+  });
+
+  LAB_DOS_VALS.forEach(function(v) {
+    var k = safeKey(v);
+    data.dos[k] = [
+      document.getElementById('lab-dos-' + k + '-1').value,
+      document.getElementById('lab-dos-' + k + '-2').value,
+      document.getElementById('lab-dos-' + k + '-3').value
+    ];
+  });
+
+  LAB_TIM_VALS.forEach(function(v) {
+    var k = safeKey(v);
+    data.tim[k] = [
+      document.getElementById('lab-tim-' + k + '-1').value,
+      document.getElementById('lab-tim-' + k + '-2').value,
+      document.getElementById('lab-tim-' + k + '-3').value
+    ];
+  });
+
+  return data;
+}
+
+// เขียนค่าจาก object ลง DOM
+function fillLabDataToDOM(data) {
+  document.getElementById('labInitialUv').value = data.initialUv || 0.850;
+
+  LAB_PH_VALS.forEach(function(v) {
+    var k = safeKey(v);
+    var vals = (data.ph && data.ph[k]) ? data.ph[k] : ['', '', ''];
+    document.getElementById('lab-ph-' + k + '-1').value = vals[0] || '';
+    document.getElementById('lab-ph-' + k + '-2').value = vals[1] || '';
+    document.getElementById('lab-ph-' + k + '-3').value = vals[2] || '';
+  });
+
+  LAB_DOS_VALS.forEach(function(v) {
+    var k = safeKey(v);
+    var vals = (data.dos && data.dos[k]) ? data.dos[k] : ['', '', ''];
+    document.getElementById('lab-dos-' + k + '-1').value = vals[0] || '';
+    document.getElementById('lab-dos-' + k + '-2').value = vals[1] || '';
+    document.getElementById('lab-dos-' + k + '-3').value = vals[2] || '';
+  });
+
+  LAB_TIM_VALS.forEach(function(v) {
+    var k = safeKey(v);
+    var vals = (data.tim && data.tim[k]) ? data.tim[k] : ['', '', ''];
+    document.getElementById('lab-tim-' + k + '-1').value = vals[0] || '';
+    document.getElementById('lab-tim-' + k + '-2').value = vals[1] || '';
+    document.getElementById('lab-tim-' + k + '-3').value = vals[2] || '';
+  });
+}
+
+// คำนวณ avg & % removal ของแถวเดียว
+function calcOneRow(prefix, k) {
+  var id = 'lab-' + prefix + '-' + k;
+  var v1 = parseFloat(document.getElementById(id + '-1').value);
+  var v2 = parseFloat(document.getElementById(id + '-2').value);
+  var v3 = parseFloat(document.getElementById(id + '-3').value);
+
+  var avgEl = document.getElementById(id + '-avg');
+  var pctEl = document.getElementById(id + '-pct');
+  var init = parseFloat(document.getElementById('labInitialUv').value);
+
+  var count = 0, sum = 0;
+  if (!isNaN(v1)) { sum += v1; count++; }
+  if (!isNaN(v2)) { sum += v2; count++; }
+  if (!isNaN(v3)) { sum += v3; count++; }
+
+  if (count === 3) {
+    var avg = sum / 3;
+    avgEl.textContent = avg.toFixed(3);
+    if (!isNaN(init) && init > 0) {
+      var pct = ((init - avg) / init) * 100;
+      pctEl.textContent = pct.toFixed(1) + '%';
+      pctEl.style.color = pct > 50 ? 'var(--cyan)' : pct > 20 ? 'var(--amber)' : 'var(--red)';
+    } else {
+      pctEl.textContent = '-';
+      pctEl.style.color = '';
+    }
+  } else {
+    avgEl.textContent = count > 0 ? '(' + count + '/3)' : '-';
+    pctEl.textContent = '-';
+    pctEl.style.color = '';
+  }
+}
+
+// คำนวณทุกแถวใหม่
+function recalcAllRows() {
+  LAB_PH_VALS.forEach(function(v) { calcOneRow('ph', safeKey(v)); });
+  LAB_DOS_VALS.forEach(function(v) { calcOneRow('dos', safeKey(v)); });
+  LAB_TIM_VALS.forEach(function(v) { calcOneRow('tim', safeKey(v)); });
+}
+
+// สร้าง HTML ตาราง 1 ชุด
+function buildTableRows(prefix, vals) {
+  return vals.map(function(v) {
+    var k = safeKey(v);
+    var id = 'lab-' + prefix + '-' + k;
+    return '<tr>' +
+      '<td><strong>' + v + '</strong></td>' +
+      '<td><input type="number" step="0.001" class="lab-input" id="' + id + '-1"></td>' +
+      '<td><input type="number" step="0.001" class="lab-input" id="' + id + '-2"></td>' +
+      '<td><input type="number" step="0.001" class="lab-input" id="' + id + '-3"></td>' +
+      '<td class="lab-res" id="' + id + '-avg">-</td>' +
+      '<td class="lab-pct" id="' + id + '-pct">-</td>' +
+      '</tr>';
+  }).join('');
+}
+
+// Handler เมื่อ input เปลี่ยนค่า — คำนวณ + เซฟ
+function onLabInput() {
+  recalcAllRows();
+  // เซฟข้อมูลของถ่านที่กำลังเลือกอยู่
+  var data = collectLabDataFromDOM();
+  saveLabData(currentBiocharType, data);
+}
+
+// เปลี่ยนถ่าน: เซฟถ่านเก่า -> โหลดถ่านใหม่
+function switchBiochar() {
+  // 1. เซฟข้อมูลถ่านเก่าก่อน (ถ้ามีข้อมูล)
+  var uvField = document.getElementById('labInitialUv');
+  if (uvField && uvField.value) {
+    var oldData = collectLabDataFromDOM();
+    saveLabData(currentBiocharType, oldData);
+  }
+
+  // 2. อ่านถ่านที่เลือกใหม่
+  var radio = document.querySelector('input[name="labBiocharType"]:checked');
+  if (!radio) return;
+  currentBiocharType = radio.value;
+
+  // 3. อัพเดท badge แสดงชื่อถ่าน
+  var badge = document.getElementById('biocharBadge');
+  if (badge) {
+    badge.textContent = BIOCHAR_NAMES[currentBiocharType] || currentBiocharType;
+    badge.className = 'biochar-indicator ' + currentBiocharType;
+  }
+
+  // 4. โหลดข้อมูลถ่านใหม่จาก localStorage
+  var newData = loadLabData(currentBiocharType);
+
+  // 5. เขียนค่าลง DOM
+  fillLabDataToDOM(newData);
+
+  // 6. คำนวณค่าทั้งหมดใหม่
+  recalcAllRows();
+}
+
+// สลับ tab (pH / Dosage / Time)
+function switchLabTab(tab) {
+  document.querySelectorAll('.lab-tab').forEach(function(el){ el.style.display = 'none'; });
+  document.getElementById('tab-' + tab).style.display = 'block';
+  document.getElementById('btn-tab-ph').classList.toggle('active', tab === 'ph');
+  document.getElementById('btn-tab-dosage').classList.toggle('active', tab === 'dosage');
+  document.getElementById('btn-tab-time').classList.toggle('active', tab === 'time');
+}
+
+// Init ทั้งระบบ Lab
+function initLabSystem() {
+  // 1. สร้างตาราง
+  document.querySelector('#table-ph tbody').innerHTML = buildTableRows('ph', LAB_PH_VALS);
+  document.querySelector('#table-dosage tbody').innerHTML = buildTableRows('dos', LAB_DOS_VALS);
+  document.querySelector('#table-time tbody').innerHTML = buildTableRows('tim', LAB_TIM_VALS);
+
+  // 2. ผูก event listener ให้ทุก lab-input (ใช้ event delegation)
+  document.getElementById('page-labrecord').addEventListener('input', function(e) {
+    if (e.target.classList.contains('lab-input') || e.target.id === 'labInitialUv') {
+      onLabInput();
+    }
+  });
+
+  // 3. ผูก event ให้ radio buttons เปลี่ยนถ่าน
+  document.querySelectorAll('input[name="labBiocharType"]').forEach(function(radio) {
+    radio.addEventListener('change', function() {
+      switchBiochar();
+    });
+  });
+
+  // 4. โหลดข้อมูลถ่านตัวแรกที่ถูกเลือก
+  var initialRadio = document.querySelector('input[name="labBiocharType"]:checked');
+  if (initialRadio) {
+    currentBiocharType = initialRadio.value;
+  }
+
+  var initialData = loadLabData(currentBiocharType);
+  fillLabDataToDOM(initialData);
+  recalcAllRows();
+
+  // อัพเดท badge
+  var badge = document.getElementById('biocharBadge');
+  if (badge) {
+    badge.textContent = BIOCHAR_NAMES[currentBiocharType] || currentBiocharType;
+    badge.className = 'biochar-indicator ' + currentBiocharType;
+  }
 }
 </script>
 </body>
