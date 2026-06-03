@@ -960,52 +960,92 @@ function setupBottomNav() {
 }
 
 // ════════════════════════════════════════
-// DASHBOARD
+// DASHBOARD (CALENDAR VIEW)
 // ════════════════════════════════════════
+var calCurrentDate = new Date();
+
 function renderDashboard() {
-  var today   = new Date().toDateString();
-var logsToday = DATA.dailyLogs.filter(function(l){ return new Date(l.logDate).toDateString() === today; }).length;
-var pending   = DATA.tasks.filter(function(t){ return t.status !== 'DONE'; }).length;
-
-  document.getElementById('sItems').textContent = DATA.items.length;
-  document.getElementById('sChems').textContent = DATA.chemicals.length;
-document.getElementById('sLogs').textContent  = logsToday;
-  document.getElementById('sTasks').textContent = pending;
-
-  var alerts = [];
-DATA.items.forEach(function(i) {
-    var q = Number(i.qtyAvailable);
-    if (q <= 0)      alerts.push({ cls:'crit', msg:'🔴 ' + i.itemName + ' — หมดแล้ว' });
-    else if (q <= 2) alerts.push({ cls:'warn', msg:'🟡 ' + i.itemName + ' — เหลือน้อย (' + q + ' ' + (i.unit||'อัน') + ')' });
-  });
-var now = new Date();
-  DATA.chemicals.forEach(function(c) {
-    if (!c.expiryDate) return;
-    var diff = (new Date(c.expiryDate) - now) / 86400000;
-    if (diff <= 0)      alerts.push({ cls:'crit', msg:'🚫 ' + c.chemName + ' — หมดอายุแล้ว' });
-    else if (diff < 30) alerts.push({ cls:'warn', msg:'⏰ ' + c.chemName + ' — อีก ' + Math.ceil(diff) + ' วัน' });
-  });
-var al = document.getElementById('alertList');
-  if (alerts.length) {
-    al.innerHTML = alerts.map(function(a) { return '<div class="alert-item ' + a.cls + '">' + a.msg + '</div>'; }).join('');
-} else {
-    al.innerHTML = '<div class="empty">✅ ไม่มีการแจ้งเตือน</div>';
+  renderCalendar();
 }
 
-  var recent = DATA.transactions.slice().sort(function(a,b){ return new Date(b.dateTime)-new Date(a.dateTime); }).slice(0,6);
-  var rl = document.getElementById('recentList');
-if (recent.length) {
-    rl.innerHTML = recent.map(function(t) {
-      return '<div class="recent-row">' +
-        '<span class="type-pill ' + t.type + '">' + t.type + '</span>' +
-        '<span style="flex:1">' + t.itemName + '</span>' +
-        '<span style="color:var(--text2);font-size:.7rem;font-family:var(--mono)">' + t.person + '</span>' +
-        '<span style="color:var(--text3);font-size:.65rem;margin-left:8px">' + fmtDate(t.dateTime) + '</span>' +
-        '</div>';
-    }).join('');
-} else {
-    rl.innerHTML = '<div class="empty">ยังไม่มีกิจกรรม</div>';
+function changeMonth(dir) {
+  calCurrentDate.setMonth(calCurrentDate.getMonth() + dir);
+  renderCalendar();
+}
+
+function renderCalendar() {
+  var y = calCurrentDate.getFullYear();
+  var m = calCurrentDate.getMonth();
+  var firstDay = new Date(y, m, 1).getDay();
+  var daysInMonth = new Date(y, m + 1, 0).getDate();
+
+  var monthsTH = ["มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน","กรกฎาคม","สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม"];
+  document.getElementById('calMonthYear').textContent = monthsTH[m] + ' ' + (y + 543);
+
+  // ดึงข้อมูลจาก DATA.dailyLogs ที่โหลดมารอไว้แล้ว (O(N) Speed)
+  var logDays = {};
+  if (DATA && DATA.dailyLogs) {
+    DATA.dailyLogs.forEach(function(l) {
+      var d = new Date(l.logDate);
+      if (d.getFullYear() === y && d.getMonth() === m) {
+        logDays[d.getDate()] = true;
+      }
+    });
   }
+
+  var html = '<div class="cal-day-head">อา</div><div class="cal-day-head">จ</div><div class="cal-day-head">อ</div><div class="cal-day-head">พ</div><div class="cal-day-head">พฤ</div><div class="cal-day-head">ศ</div><div class="cal-day-head">ส</div>';
+
+  // ช่องว่างวันก่อนหน้าเริ่มต้นเดือน
+  for (var i = 0; i < firstDay; i++) {
+    html += '<div class="cal-day empty"></div>';
+  }
+  
+  // สร้างช่องวันที่
+  for (var d = 1; d <= daysInMonth; d++) {
+    var cls = 'cal-day';
+    var onClick = '';
+    
+    if (logDays[d]) {
+      cls += ' has-log';
+      onClick = 'onclick="showLogsForDate(' + y + ',' + m + ',' + d + ', this)"';
+    }
+    html += '<div class="' + cls + '" ' + onClick + '>' + d + '</div>';
+  }
+  
+  document.getElementById('calGrid').innerHTML = html;
+  document.getElementById('calLogDetailsCard').style.display = 'none';
+}
+
+function showLogsForDate(y, m, d, el) {
+  document.querySelectorAll('.cal-day').forEach(function(n){ n.classList.remove('active'); });
+  if (el) el.classList.add('active');
+
+  var targetDateStr = new Date(y, m, d).toDateString();
+  var dayLogs = DATA.dailyLogs.filter(function(l) {
+    return new Date(l.logDate).toDateString() === targetDateStr;
+  });
+
+  var detailsCard = document.getElementById('calLogDetailsCard');
+  var detailsList = document.getElementById('calLogDetailsList');
+  var detailsTitle = document.getElementById('calLogDetailsTitle');
+
+  if (dayLogs.length === 0) {
+    detailsCard.style.display = 'none';
+    return;
+  }
+
+  var monthsTH = ["มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน","กรกฎาคม","สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม"];
+  detailsTitle.textContent = '📓 บันทึกวันที่ ' + d + ' ' + monthsTH[m] + ' ' + (y + 543);
+  
+  detailsList.innerHTML = '<div class="nb-line" style="left:26px;"></div>' + dayLogs.map(function(l) {
+    return '<div class="log-entry" style="padding-left:46px;">' +
+      '<div class="le-person" style="font-family:var(--mono);">👤 ' + l.person + '</div>' +
+      '<div class="le-detail">' + fmtLogDetail(l.detail) + '</div>' +
+      '</div>';
+  }).join('');
+  
+  detailsCard.style.display = 'block';
+  detailsCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
 function updateAlertBadge() {
